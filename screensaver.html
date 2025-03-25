@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Relaxing Screensaver</title>
+    <link rel="stylesheet" type="text/css" href="screensaver.css">
+</head>
+<body>
+    <div id="currentTrack">
+        <p id="title"></p>
+        <p id="artist"></p>
+        <p id="album"></p>
+        <div id="message" style="display: none;"><b>Click to fullscreen.</b></div>
+    </div>
+    <script>
+        document.addEventListener('click', function() {
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen().catch(err => {
+                    console.log(`Error attempting to enable full-screen mode: ${err.message} (${err.name})`);
+                });
+            }
+        });
+    </script>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const message = document.getElementById('message');
+            message.style.display = 'block';
+            setTimeout(() => {
+                message.style.display = 'none';
+            }, 5000);
+        });
+    </script>
+    <script>
+        function fetchCurrentTrack() {
+            fetch('/current-track')
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('title').innerText = `Title: ${data.title}`;
+                    document.getElementById('artist').innerText = `Artist: ${data.artist}`;
+                    document.getElementById('album').innerText = `Album: ${data.album}`;
+                })
+                .catch(error => console.error('Error fetching current track:', error));
+        }
+
+        // Fetch the current track information every 5 seconds
+        setInterval(fetchCurrentTrack, 5000);
+        fetchCurrentTrack(); // Initial fetch
+
+        // Close the screensaver page when the music stops playing
+        window.addEventListener('message', (event) => {
+            if (event.data === 'musicStopped') {
+                window.close();
+            }
+        });
+
+    </script>
+   
+</body>
+</html>

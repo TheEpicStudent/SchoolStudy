@@ -1,0 +1,59 @@
+video {
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    min-width: 100%;
+    min-height: 100%;
+    width: auto;
+    height: auto;
+    z-index: -100;
+    background-size: cover;
+    overflow: hidden;
+}
+
+video::-webkit-media-controls {
+    display: none !important;
+}
+
+video::-moz-media-controls {
+    display: none !important;
+}
+
+video::-ms-media-controls {
+    display: none !important;
+}
+
+video::media-controls {
+    display: none !important;
+}
+
+.message {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 2em;
+    text-align: center;
+    width: 100%;
+    font-family: Arial, sans-serif;
+}
+
+#currentTrack {
+    background: rgba(157, 157, 157, 0.769);
+    padding: 10px;
+    border-radius: 10px;
+    margin: 20px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    font-family: Arial, sans-serif;
+}
+
+button {
+    background-color: #c9c9c9;
+    color: #000000;
+    padding: 5px 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}

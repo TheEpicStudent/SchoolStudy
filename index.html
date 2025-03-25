@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>School Studies</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body>
+  <div class="thick-blue-bar"></div>
+    <div class="container">
+      <h1>School Studies</h1>
+      <p>Music and sounds to help you focus and study</p>
+      <div class="short-blue-bar"></div>
+      <p><b><a href="/music.html">Open Beats</a></b></p>
+      <p>Beats is an app that plays music that is more focused on more relaxing genres, so you can focus more.</p>
+      <p><i>Disclaimer: This does not include lofi, as we are making a dedicated lofi app.</i></p>
+    <!-- THIS PAGE IS NOT DONE YET 
+      <div class="short-blue-bar"></div>
+      <p><b><a href="/noisegen.html">Open Noise Generator</a> (Alpha)</b></p>
+      <p>Noise Generator is an app that plays sounds that help you focus, like rain, white noise, and more.</p>
+      <div class="short-blue-bar"></div>
+    -->
+    </div>
+    <style>
+      body {
+          transition: background-color 1s, color 1s;
+      }
+      .dark-mode {
+          background-color: #121212;
+          color: #ffffff;
+      }
+      .dark-mode .thick-blue-bar,
+      .dark-mode .short-blue-bar,
+      .dark-mode .thin-blue-bar {
+          background-color: #b25ec9;
+      }
+      .dark-mode button {
+          background-color: #855193;
+          color: #ffffff;
+      }
+      .dark-mode a {
+          color: #9240a9;
+      }
+      .dark-mode input[type="range"] {
+          background-color: #949494;
+      }
+      .dark-mode input[type="range"]::-webkit-slider-thumb {
+          background-color: #854297;
+      }
+      .dark-mode input[type="range"]::-moz-range-thumb {
+          background-color: #854297;
+      }
+      .dark-mode a:visited {
+          color: #c98add;
+      }
+      .dark-mode button:hover {
+          background-color: #633171
+      }
+
+  </style>
+  <div class="footer">
+    <div class="container">
+    <button id="darkModeToggle">Dark/Light mode (Beta)</button>
+    </div>
+  </div>
+  <script>
+      // Check if dark mode was enabled last time
+      if (localStorage.getItem('darkMode') === 'enabled') {
+          document.body.classList.add('dark-mode');
+      }
+
+      // Get the dark mode toggle button
+      const darkModeToggle = document.getElementById('darkModeToggle');
+
+      // Toggle dark mode and save preference
+      darkModeToggle.addEventListener('click', () => {
+          document.body.classList.toggle('dark-mode');
+          if (document.body.classList.contains('dark-mode')) {
+              localStorage.setItem('darkMode', 'enabled');
+          } else {
+              localStorage.removeItem('darkMode');
+          }
+      });
+  </script>
+</body>
+</html>
