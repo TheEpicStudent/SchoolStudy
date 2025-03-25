@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lofi Beta-v1.4</title>
+    <link rel="stylesheet" type="text/css" href="lofistyle.css">
+</head>
+<body>
+    <div class="thick-blue-bar"></div>
+    <div class="container">
+        <h1>Beats: Lofi</h1>
+        <p>The Lofi Beats app is currently in it's <b>beta</b> stage, so bugs and issues might be encountered.</p>
+        <p><i>I'm pretty sure you shouldn't be seeing this page, but whatever.</i></p>
+        <p> </p>
+        <p><i>Currently Playing:</i></p>
+        <p> </p>
+        <audio id="audioPlayer" style="display:none;" autoplay></audio>
+        <div id="metadata">
+            <p id="title"></p>
+            <p id="artist"></p>
+            <p id="album"></p>
+        </div>
+        <div class="short-blue-bar"></div>
+        <input type="range" id="timeBar" value="0" max="100" step="1" oninput="seekAudio()">
+        <p><time id="currentTime">0:00</time> / <time id="duration">0:00</time></p>
+        <script>
+            const currentTimeElement = document.getElementById('currentTime');
+            const durationElement = document.getElementById('duration');
+            const volumeElement = document.getElementById('volume');
+
+            audioPlayer.addEventListener('timeupdate', () => {
+                const currentMinutes = Math.floor(audioPlayer.currentTime / 60);
+                const currentSeconds = Math.floor(audioPlayer.currentTime % 60);
+                const durationMinutes = Math.floor(audioPlayer.duration / 60);
+                const durationSeconds = Math.floor(audioPlayer.duration % 60);
+
+                currentTimeElement.textContent = `${currentMinutes}:${currentSeconds.toString().padStart(2, '0')}`;
+                durationElement.textContent = `${durationMinutes}:${durationSeconds.toString().padStart(2, '0')}`;
+                timeBar.value = (audioPlayer.currentTime / audioPlayer.duration) * 100;
+            });
+
+            audioPlayer.addEventListener('volumechange', () => {
+                volumeElement.textContent = Math.round(audioPlayer.volume * 100);
+            });
+            audioPlayer.addEventListener('ended', () => {
+                shuffleAndPlay();
+            });
+        </script>
+        <button onclick="shuffleAndPlay()">››</button>
+        <button id="playPauseButton" onclick="togglePlayPause()">▶</button>
+        <button onclick="document.getElementById('audioPlayer').muted = !document.getElementById('audioPlayer').muted">🔇</button>
+        <!-- <div class="short-blue-bar"></div><p>Volume: <span id="volume">100</span>%</p>
+         <p><span id="d"></span></p>
+        
+            <button onclick="document.getElementById('audioPlayer').volume -= 0.1"><b>Volume Down</b></button>
+            <button onclick="document.getElementById('audioPlayer').volume += 0.1"><b>Volume Up</b></button>
+        
+    </div> -->
+    <script>
+        let musicFiles = [];
+
+        fetch('lofi.json')
+            .then(response => { 
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                musicFiles = data;
+                shuffleAndPlay(); // Auto-play when the page loads
+            })
+            .catch(error => console.error('Error loading music.json:', error));
+
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
+
+        function shuffleAndPlay() {
+            if (musicFiles.length === 0) {
+                console.error('No music files available to play.');
+                return;
+            }
+            shuffleArray(musicFiles);
+            playMusic(musicFiles[0]);
+        }
+
+        function playMusic(track) {
+            if (!track) {
+                console.error('No track provided to play.');
+                return;
+            }
+            const audioPlayer = document.getElementById('audioPlayer');
+            audioPlayer.src = track.src;
+            audioPlayer.play();
+
+            document.getElementById('title').innerText = `${track.title}`;
+            document.getElementById('artist').innerText = `By: ${track.artist}`;
+            document.getElementById('album').innerText = `Album: ${track.album}`;
+        }
+
+        const audioPlayer = document.getElementById('audioPlayer');
+        const timeBar = document.getElementById('timeBar');
+
+        audioPlayer.addEventListener('timeupdate', () => {
+            timeBar.value = (audioPlayer.currentTime / audioPlayer.duration) * 100;
+        });
+
+        function togglePlayPause() {
+            const audioPlayer = document.getElementById('audioPlayer');
+            const playPauseButton = document.getElementById('playPauseButton');
+            if (audioPlayer.paused) {
+                audioPlayer.play();
+                playPauseButton.textContent = '⏸';
+            } else {
+                audioPlayer.pause();
+                playPauseButton.textContent = '▶';
+            }
+        }
+
+        function seekAudio() {
+            const seekTime = (timeBar.value / 100) * audioPlayer.duration;
+            audioPlayer.currentTime = seekTime;
+        }
+    </script>
+    
+    <div class="thin-blue-bar"></div>
+<div class="center">
+        <p><a href="/lofilogs">Logs and Current Problems</a></p>
+        <p><a href="/">            Go back</a></p>
+        <p><sub>Debug info: beta-v1.4 (based on beats v1.3) PB:37sh3u:<span id="debugWaiting"></span>:<span id="rangeValue"></span></sub></p>
+        <script>
+            const rangeValueElement = document.getElementById('rangeValue');
+            timeBar.addEventListener('input', () => {
+            rangeValueElement.textContent = timeBar.value;
+            });
+        </script>
+        <script>
+            const debugWaitingElement = document.getElementById('debugWaiting');
+            audioPlayer.addEventListener('waiting', () => {
+            debugWaitingElement.textContent = 'true';
+            });
+            audioPlayer.addEventListener('playing', () => {
+            debugWaitingElement.textContent = 'false';
+            });
+        </script>
+</div>
+</body>
+</html>

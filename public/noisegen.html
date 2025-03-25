@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Noise Generator</title>
+    <link rel="stylesheet" type="text/css" href="noise.css">
+</head>
+<body>
+    <div id="currentTrack">
+        <p id="noiseName"></p>
+        <button id="prevNoise">↼</button>
+        <button id="nextNoise">⇀</button>
+        <p>THIS IS NOT WORKING! I WILL FIX IT! SOON! </p>
+    </div>
+    <script>
+        const noises = ['noise/rain.mp3', 'noise/white.mp3', 'noise/noise3.mp3'];
+        let currentNoiseIndex = 0;
+
+        const noisePlayer = document.getElementById('noisePlayer');
+        const prevNoiseButton = document.getElementById('prevNoise');
+        const nextNoiseButton = document.getElementById('nextNoise');
+        const noiseNameElement = document.getElementById('noiseName');
+        const backgroundVideo = document.getElementById('backgroundVideo');
+
+        function updateNoise() {
+            const currentNoise = noises[currentNoiseIndex];
+            noisePlayer.src = currentNoise;
+            noisePlayer.play();
+            noiseNameElement.innerText = currentNoise.split('/').pop();
+            const videoName = currentNoise.replace('.mp3', '.mp4');
+            videoSource.src = videoName;
+            backgroundVideo.src = videoName;
+        }
+
+        prevNoiseButton.addEventListener('click', () => {
+            currentNoiseIndex = (currentNoiseIndex - 1 + noises.length) % noises.length;
+            updateNoise();
+        });
+
+        nextNoiseButton.addEventListener('click', () => {
+            currentNoiseIndex = (currentNoiseIndex + 1) % noises.length;
+            updateNoise();
+        });
+
+        // Initialize with the first noise
+        updateNoise();
+    </script>
+    <audio id="noisePlayer" style="display:none;" controls>
+        <source src="noise.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+    <p><b><a href="/credit.html">Credits</a></b></p>
+    <video autoplay muted loop id="backgroundVideo" style="position: fixed; right: 0; bottom: 0; min-width: 100%; min-height: 100%;">
+        <source id="videoSource" src="" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+</body>
+</html>

@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Beats v1.41</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body>
+    <div id="loadingScreen" style="position: fixed; width: 100%; height: 100%; background: rgb(53, 53, 53); display: flex; justify-content: center; align-items: center; z-index: 1000;">
+            <img src="loading.gif" alt="Loading...">
+        </div>
+        <script>
+            window.addEventListener('load', () => {
+                setTimeout(() => {
+                    document.getElementById('loadingScreen').style.display = 'none';
+                }, 500); 
+            });
+        </script>
+    <div class="thick-blue-bar"></div>
+    <div class="container">
+        
+        <h1>Beats</h1>
+        <p>Beats is an ad-free app that plays music that is more focused on more relaxing genres, so you can focus more. </p>
+        <p><i>Disclaimer: This does not include lofi, as we are making a dedicated lofi app.</i></p>
+        <p> </p>
+        <p><i>Currently Playing:</i></p>
+        <p> </p>
+        <noscript><h2><b><div id="red-text"></div>Warning: You need javascript enabled to enjoy this site.</b></h2></div></noscript>
+        
+        <audio id="audioPlayer" style="display:none;" autoplay></audio>
+        <div id="metadata">
+            <p id="title"></p>
+            <p id="artist"></p>
+            <p id="album"></p>
+        </div>
+        <p> </p>
+        <div class="short-blue-bar"></div>
+        <p><a href="/screensaver.html" target="_blank"><b>Open the screensaver here!</b></a> (This will open in a new tab).</p>
+        <p><a href="/focus.html" target="_blank"><b>Open Focus mode here.</b></a> (Click to fullscreen in tab, press ESC to exit.)</p>
+        <div class="short-blue-bar"></div>
+        <input type="range" id="timeBar" value="0" max="100" step="1" oninput="seekAudio()">
+        <p><time id="currentTime">0:00</time> / <time id="duration">0:00</time> <span id="mutedIndicator" style="display:none;">Muted!</span></p>
+        <script>
+            const audioPlayer = document.getElementById('audioPlayer');
+            const timeBar = document.getElementById('timeBar');
+            const mutedIndicator = document.getElementById('mutedIndicator');
+
+            audioPlayer.addEventListener('volumechange', () => {
+                if (audioPlayer.muted) {
+                    mutedIndicator.style.display = 'inline';
+                } else {
+                    mutedIndicator.style.display = 'none';
+                }
+            });
+        </script>
+        <script>
+            const currentTimeElement = document.getElementById('currentTime');
+            const durationElement = document.getElementById('duration');
+            const volumeElement = document.getElementById('volume');
+
+            audioPlayer.addEventListener('timeupdate', () => {
+                const currentMinutes = Math.floor(audioPlayer.currentTime / 60);
+                const currentSeconds = Math.floor(audioPlayer.currentTime % 60);
+                const durationMinutes = Math.floor(audioPlayer.duration / 60);
+                const durationSeconds = Math.floor(audioPlayer.duration % 60);
+
+                currentTimeElement.textContent = `${currentMinutes}:${currentSeconds.toString().padStart(2, '0')}`;
+                durationElement.textContent = `${durationMinutes}:${durationSeconds.toString().padStart(2, '0')}`;
+                timeBar.value = (audioPlayer.currentTime / audioPlayer.duration) * 100;
+            });
+
+            audioPlayer.addEventListener('volumechange', () => {
+                volumeElement.textContent = Math.round(audioPlayer.volume * 100);
+            });
+            audioPlayer.addEventListener('ended', () => {
+                shuffleAndPlay();
+                
+                //const screensaverWindow = window.open('', 'screensaver');
+                //if (screensaverWindow) {
+                //    screensaverWindow.postMessage('musicStopped', '*');
+                //}
+            });
+        </script>
+        <button onclick="shuffleAndPlay()">››</button>
+        <button id="playPauseButton" onclick="togglePlayPause()">▶</button>
+        <button onclick="document.getElementById('audioPlayer').muted = !document.getElementById('audioPlayer').muted">🔇</button>
+        <p> </p>
+        <p> </p>
+        <p> </p>
+        <p> </p>
+        <p> </p>
+        <p> </p>
+        <p> </p>
+        <button id="darkModeToggle">Dark/Light mode (Beta)</button>
+        <script>
+            let musicFiles = [];
+
+            fetch('music.json')
+                .then(response => { 
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    musicFiles = data;
+                    shuffleAndPlay(); // Auto-play when the page loads
+                })
+                .catch(error => console.error('Error loading music.json:', error));
+
+            function shuffleArray(array) {
+                for (let i = array.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [array[i], array[j]] = [array[j], array[i]];
+                }
+            }
+
+            function shuffleAndPlay() {
+                if (musicFiles.length === 0) {
+                    console.error('No music files available to play.');
+                    return;
+                }
+                shuffleArray(musicFiles);
+                playMusic(musicFiles[0]);
+            }
+
+            function playMusic(track) {
+                if (!track) {
+                    console.error('No track provided to play.');
+                    return;
+                }
+                const audioPlayer = document.getElementById('audioPlayer');
+                audioPlayer.src = track.src;
+                audioPlayer.play();
+
+                document.getElementById('title').innerText = `${track.title}`;
+                document.getElementById('artist').innerText = `By: ${track.artist}`;
+                document.getElementById('album').innerText = `Album: ${track.album}`;
+
+                // Update the current track information on the server
+                fetch('/current-track', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(track)
+                });
+            }
+
+            function togglePlayPause() {
+                const audioPlayer = document.getElementById('audioPlayer');
+                const playPauseButton = document.getElementById('playPauseButton');
+                if (audioPlayer.paused) {
+                    audioPlayer.play();
+                    playPauseButton.textContent = '⏸';
+                } else {
+                    audioPlayer.pause();
+                    playPauseButton.textContent = '▶';
+                }
+            }
+
+            function seekAudio() {
+                const seekTime = (timeBar.value / 100) * audioPlayer.duration;
+                audioPlayer.currentTime = seekTime;
+            }
+        </script>
+        
+        
+    </div>
+    <div class="footer">
+            <div class="thick-blue-bar"></div>
+            <div class="center">
+                <p><a href="/public/logs.md" download>Download Logs and Current Problems</a></p>
+                <p><a href="/">Go back</a></p>
+                
+                <style>
+                    body {
+                        transition: background-color 1s, color 1s;
+                    }
+                    .dark-mode {
+                        background-color: #121212;
+                        color: #ffffff;
+                    }
+                    .dark-mode .thick-blue-bar,
+                    .dark-mode .short-blue-bar,
+                    .dark-mode .thin-blue-bar {
+                        background-color: #b25ec9;
+                    }
+                    .dark-mode button {
+                        background-color: #855193;
+                        color: #ffffff;
+                    }
+                    .dark-mode a {
+                        color: #9240a9;
+                    }
+                    .dark-mode input[type="range"] {
+                        background-color: #949494;
+                    }
+                    .dark-mode input[type="range"]::-webkit-slider-thumb {
+                        background-color: #854297;
+                    }
+                    .dark-mode input[type="range"]::-moz-range-thumb {
+                        background-color: #854297;
+                    }
+                    .dark-mode a:visited {
+                        color: #c98add;
+                    }
+                    .dark-mode button:hover {
+                        background-color: #633171
+                    }
+    
+                </style>
+                <script>
+                    // Check if dark mode was enabled last time
+                    if (localStorage.getItem('darkMode') === 'enabled') {
+                        document.body.classList.add('dark-mode');
+                    }
+    
+                    // Toggle dark mode and save preference
+                    darkModeToggle.addEventListener('click', () => {
+                        document.body.classList.toggle('dark-mode');
+                        if (document.body.classList.contains('dark-mode')) {
+                            localStorage.setItem('darkMode', 'enabled');
+                        } else {
+                            localStorage.removeItem('darkMode');
+                        }
+                    });
+                </script>
+                <p><sub>Debug info: v1.41 PB:37sh3u:<span id="debugWaiting"></span>:<span id="rangeValue"></span>:<noscript>NS</noscript></sub></p>
+                <script>
+                    const rangeValueElement = document.getElementById('rangeValue');
+                    timeBar.addEventListener('input', () => {
+                        rangeValueElement.textContent = timeBar.value;
+                    });
+                </script>
+                <script>
+                    const debugWaitingElement = document.getElementById('debugWaiting');
+                    audioPlayer.addEventListener('waiting', () => {
+                        debugWaitingElement.textContent = 'true';
+                    });
+                    audioPlayer.addEventListener('playing', () => {
+                        debugWaitingElement.textContent = 'false';
+                    });
+                </script>
+            </div>
+            
+            </div>
+
+</body>
+</html>
