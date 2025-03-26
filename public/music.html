@@ -23,9 +23,9 @@
         <h1>Beats</h1>
         <p>Beats is an ad-free app that plays music that is more focused on more relaxing genres, so you can focus more. </p>
         <p><i>Disclaimer: This does not include lofi, as we are making a dedicated lofi app.</i></p>
-        <p> </p>
+        <o>spacer</o>
         <p><i>Currently Playing:</i></p>
-        <p> </p>
+        <o>spacer</o>
         <noscript><h2><b><div id="red-text"></div>Warning: You need javascript enabled to enjoy this site.</b></h2></div></noscript>
         
         <audio id="audioPlayer" style="display:none;" autoplay></audio>
@@ -34,7 +34,7 @@
             <p id="artist"></p>
             <p id="album"></p>
         </div>
-        <p> </p>
+        <o>spacer</o>
         <div class="short-blue-bar"></div>
         <p><a href="/screensaver.html" target="_blank"><b>Open the screensaver here!</b></a> (This will open in a new tab).</p>
         <p><a href="/focus.html" target="_blank"><b>Open Focus mode here.</b></a> (Click to fullscreen in tab, press ESC to exit.)</p>
@@ -85,14 +85,14 @@
         <button onclick="shuffleAndPlay()">››</button>
         <button id="playPauseButton" onclick="togglePlayPause()">▶</button>
         <button onclick="document.getElementById('audioPlayer').muted = !document.getElementById('audioPlayer').muted">🔇</button>
-        <p> </p>
-        <p> </p>
-        <p> </p>
-        <p> </p>
-        <p> </p>
-        <p> </p>
-        <p> </p>
-        <button id="darkModeToggle">Dark/Light mode (Beta)</button>
+        <o>spacer</o>
+        <o>spacer</o>
+        <o>spacer</o>
+        <o>spacer</o>
+        <o>spacer</o>
+        <o>spacer</o>
+        <o>spacer</o>
+        
         <script>
             let musicFiles = [];
 
@@ -170,9 +170,15 @@
     </div>
     <div class="footer">
             <div class="thick-blue-bar"></div>
+            
+            <div class="center"><button id="darkModeToggle">Dark/Light mode (Beta)</button></div>
             <div class="center">
-                <p><a href="/public/logs.md" download>Download Logs and Current Problems</a></p>
-                <p><a href="/">Go back</a></p>
+                <w>w</w>
+                <p><a href="/public/logs.md" target="_blank">Report an issue here.</a></p>
+                <w>w</w>
+                <p><a href="/about.html">About this website</a></p>
+                <w>w</w>
+                <p><a href="/">Go back home.</a></p>
                 
                 <style>
                     body {
@@ -227,7 +233,9 @@
                         }
                     });
                 </script>
+                <w>w</w>
                 <p><sub>Debug info: v1.41 PB:37sh3u:<span id="debugWaiting"></span>:<span id="rangeValue"></span>:<noscript>NS</noscript></sub></p>
+                <w>w</w>
                 <script>
                     const rangeValueElement = document.getElementById('rangeValue');
                     timeBar.addEventListener('input', () => {
