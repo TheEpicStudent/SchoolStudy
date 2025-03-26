@@ -126,6 +126,25 @@ header nav {
     margin-bottom: 20px;
 }
 
+.increased-font {
+    font-size: 20px;
+}
+
+.spacer {
+    margin-top: 20px;
+}
+
+/* Spacer: Type any text using the <o></o> tag */
+o {
+    margin-top: 20px;
+    color: #00000000; 
+}
+
+w {
+    margin-top: 10px;
+    color: #00000000; 
+}
+
 /* Showcase */
 #showcase {
     min-height: 400px;
