@@ -3,15 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pomodoro Timer</title>
+    <title id="title">Pomodoro Timer</title>
     <link rel="stylesheet" type="text/css" href="style.css">
 </head>
 <body>
     <style>
         .center {
             text-align: center;
+            align-content: center;
         }
-        #Timer {
+        #timer {
             margin-top: 100px;
             margin-left: 500px;
             margin-right: 500px;
@@ -19,15 +20,349 @@
             border: 1px solid black;
             border-radius: 10px;
             background-color: #f3f3f3;
+            align-items: center;
+            align-self: center;
+            align-content: center;
+        }
+        #timer button {
+            width: 100px;
+            height: 50px;
         }
         #Timer h1 {
             font-size: 50px;
             color: #333;
         }
-    </style>
-        <h1 class="center">Pomodoro Timer</h1>
-    <div id="timer">
-        <h1 class="timer">5:00</h1>
-    </div>
 
+        :picture-in-picture
+        {
+            display: none;
+            transform: translateX(-381px);
+            visibility: hidden;
+            width: 0;
+            height: 0;
+        }
+        body {
+          transition: background-color 1s, color 1s;
+      }
+      .dark-mode {
+          background-color: #121212;
+          color: #ffffff;
+      }
+      .dark-mode .thick-blue-bar,
+      .dark-mode .short-blue-bar,
+      .dark-mode .thin-blue-bar {
+          background-color: #b25ec9;
+      }
+      .dark-mode button {
+          background-color: #855193;
+          color: #ffffff;
+      }
+      .dark-mode a {
+          color: #9240a9;
+      }
+      .dark-mode input[type="range"] {
+          background-color: #949494;
+      }
+      .dark-mode input[type="range"]::-webkit-slider-thumb {
+          background-color: #854297;
+      }
+      .dark-mode input[type="range"]::-moz-range-thumb {
+          background-color: #854297;
+      }
+      .dark-mode a:visited {
+          color: #c98add;
+      }
+      .dark-mode button:hover {
+          background-color: #633171
+      }
+
+      .dark-mode input[type="number"] {
+          background-color: #282727;
+          color: #ffffff;
+      }
+      .dark-mode input[type="number"]::placeholder {
+          color: #818181;
+      }
+      .dark-mode #timer {
+          background-color: #1e1e1e;
+          color: #ffffff;
+      }
+    </style>
+    <div class="thick-blue-bar"></div>
+    <h1 class="center">Pomodoro Timer</h1>
+    <div class="center">
+        <noscript>
+            <p>This page requires JavaScript to be enabled.</p>
+        </noscript>
+        
+        <w>w</w>
+        <a href="#" id="openModal">How to use the Pomodoro timer efficencly</a>
+        <p id="counter" class="increased-font"><b>-ㅤㅤㅤ-ㅤㅤㅤ-ㅤㅤㅤ-</b></p>
+        
+        <div id="myModal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <h2>How to use the Pomodoro timer efficencly</h2>
+                <o>o</o>
+                <p>The Pomodoro timer is a great way to divide your working time (focus time) and your free time (break time). Here are some examples for efficence use of the timer.</p>
+                <p>Set the focus timer for 20 minutes and the break timer for 10 minutes. This is a great choice for longer projects.</p>
+                <p>Set the focus timer for 10 minutes and the break timer for 5 minutes. This is a great choice for shorter projects.</p>
+                <p>During your focus time, work on your project or whatever you are working on. During your break time, you can do something like cleaning, or something lighter like doing a jigsaw puzzle or playing a game.</p>
+            </div>
+        </div>
+        <p id="discripter">Focus Time | Break Time</p>
+        <input type="number" id="minutes" placeholder="In minutes">
+        <input type="number" id="break-minutes" placeholder="In minutes">
+    </div>
+    <div class="timer"><button id="start">Start Timer</button>
+    <button id="pipButton">Picture In Picture</button></div>
+    <video id="pipVideo" style="display: none; width: 0; height: 0;" muted></video>
+    <div id="timer">
+        
+        <h1 class="timer" id="countdown">(Press Start)</h1>
+        
+    </div>
+    
+    <o>
+        spacer
+    </o>
+    <script>
+        let time = 0;
+        let interval = null;
+        let cycleCount = 0; // Variable to track completed cycles
+        const countdownEl = document.getElementById('countdown');
+        const startBtn = document.getElementById('start');
+        const discripter = document.getElementById('discripter');
+        const counterEl = document.getElementById('counter');
+        const audio = new Audio('/tone.mp3');
+        // Request notification permissions on page load
+        if (Notification.permission !== "granted" && Notification.permission !== "denied") {
+            Notification.requestPermission().then(permission => {
+                if (permission === "granted") {
+                    console.log("Notification permission granted.");
+                } else {
+                    console.log("Notification permission denied.");
+                }
+            });
+        }
+
+        startBtn.addEventListener('click', () => {
+            if (startBtn.innerHTML === 'Stop Timer') {
+                clearInterval(interval);
+                title.innerHTML = 'Pomodoro Timer'; 
+                startBtn.innerHTML = 'Start Timer';
+                countdownEl.innerHTML = '(Press Start)';
+                document.getElementById("minutes").style.visibility = "visible";
+                document.getElementById("break-minutes").style.visibility = "visible";
+                discripter.innerHTML = 'Focus Time | Break Time';
+                return;
+            }
+
+            const focusMinutes = parseInt(document.getElementById('minutes').value, 10);
+            const breakMinutes = parseInt(document.getElementById('break-minutes').value, 10);
+
+            if (isNaN(focusMinutes) || focusMinutes <= 0) {
+                alert('Please enter a valid number of Focus minutes.');
+                return;
+            }
+
+            if (isNaN(breakMinutes) || breakMinutes <= 0) {
+                alert('Please enter a valid number of Break minutes.');
+                return;
+            }
+
+            startBtn.innerHTML = 'Stop Timer';
+            document.getElementById("minutes").style.visibility = "hidden";
+            document.getElementById("break-minutes").style.visibility = "hidden";
+            time = focusMinutes * 60;
+            discripter.innerHTML = 'Currently on Focus Time';
+
+            // Start the interval
+            interval = setInterval(() => updateCountdown(focusMinutes, breakMinutes), 1000);
+        });
+
+        function updateCountdown(focusMinutes, breakMinutes) {
+            const minutes = Math.floor(time / 60);
+            let seconds = time % 60;
+
+            seconds = seconds < 10 ? '0' + seconds : seconds;
+
+            countdownEl.innerHTML = `${minutes}:${seconds}`;
+            if (discripter.innerHTML === 'Currently on Focus Time') {
+                title.innerHTML = `${minutes}:${seconds}` + ' - Focus - Pomodoro Timer';
+            time--;
+            } else {
+                title.innerHTML = `${minutes}:${seconds}` + ' - Break - Pomodoro Timer';
+                time--;
+            }
+
+            if (time < 0) {
+                clearInterval(interval);
+
+                if (discripter.innerHTML === 'Currently on Focus Time') {
+                    audio.play();
+                    countdownEl.innerHTML = 'Loading...';
+                    discripter.innerHTML = 'Currently on Break Time';
+                    if (Notification.permission === "granted") {
+                        new Notification("Break time is over! Starting focus time.");
+                    }
+                    time = breakMinutes * 60;
+                    interval = setInterval(() => updateCountdown(focusMinutes, breakMinutes), 1000);
+                } else {
+                    countdownEl.innerHTML = 'Loading...';
+                    audio.play();
+                    discripter.innerHTML = 'Currently on Focus Time';
+                    if (Notification.permission === "granted") {
+                        new Notification("Focus time is over! Starting break time.");
+                    }
+                    time = focusMinutes * 60;
+                    cycleCount++; // Increment the cycle count
+                    updateCycleCounter(); // Update the cycle counter display
+                    interval = setInterval(() => updateCountdown(focusMinutes, breakMinutes), 1000);
+                }
+            }
+        }
+
+        function updateCycleCounter() {
+            if (cycleCount === 1) {
+                counterEl.innerHTML = "●ㅤㅤㅤ-ㅤㅤㅤ-ㅤㅤㅤ-";
+            } else if (cycleCount === 2) {
+                counterEl.innerHTML = "●ㅤㅤㅤ●ㅤㅤㅤ-ㅤㅤㅤ-";
+            } else if (cycleCount === 3) {
+                counterEl.innerHTML = "●ㅤㅤㅤ●ㅤㅤㅤ●ㅤㅤㅤ-";
+            } else if (cycleCount === 4) {
+                counterEl.innerHTML = "●ㅤㅤㅤ●ㅤㅤㅤ●ㅤㅤㅤ●";
+            } else if (cycleCount > 4) {
+                counterEl.innerHTML = "-ㅤㅤㅤ-ㅤㅤㅤ-ㅤㅤㅤ-";
+                cycleCount = 0;
+            } else {
+                counterEl.innerHTML = "-ㅤㅤㅤ-ㅤㅤㅤ-ㅤㅤㅤ-";
+            }
+        }
+
+        // Save the last entered focus and break minutes to local storage
+        window.addEventListener('load', () => {
+            const savedFocusMinutes = localStorage.getItem('lastFocusMinutes');
+            const savedBreakMinutes = localStorage.getItem('lastBreakMinutes');
+
+            if (savedFocusMinutes) {
+                document.getElementById('minutes').value = savedFocusMinutes;
+            }
+
+            if (savedBreakMinutes) {
+                document.getElementById('break-minutes').value = savedBreakMinutes;
+            }
+        });
+    </script>
+    <script>
+        // Get modal elements
+        const modal = document.getElementById("myModal");
+        const openModal = document.getElementById("openModal");
+        const closeModal = document.querySelector(".close");
+
+        // Open the modal when the link is clicked
+        openModal.addEventListener("click", (e) => {
+            e.preventDefault(); // Prevent default link behavior
+            modal.style.display = "block";
+        });
+
+        // Close the modal when the close button is clicked
+        closeModal.addEventListener("click", () => {
+            modal.style.display = "none";
+        });
+
+        // Close the modal when clicking outside the modal content
+        window.addEventListener("click", (e) => {
+            if (e.target === modal) {
+                modal.style.display = "none";
+            }
+        });
+
+        const pipButton = document.getElementById('pipButton');
+        const pipVideo = document.getElementById('pipVideo');
+        document.getElementById("pipVideo").style.visibility = "hidden";
+
+        // Add event listener to the PiP button
+        pipButton.addEventListener('click', async () => {
+            try {
+                // Check if the element is already in PiP mode
+                if (document.pictureInPictureElement) {
+                    await document.exitPictureInPicture();
+                    document.getElementById("pipVideo").style.visibility = "hidden";
+                } else {
+                    // Update the video element with the countdown text
+                    const stream = countdownToVideoStream();
+                    disallowReturnToOpener: true,
+                    pipVideo.srcObject = stream;
+                    pipVideo.style.display = 'block';
+                    await pipVideo.play();
+                    await pipVideo.requestPictureInPicture();
+
+                }
+            } catch (error) {
+                console.error('Error enabling PiP mode:', error);
+            }
+        });
+
+        // Function to create a video stream from the countdown text
+        function countdownToVideoStream() {
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            canvas.width = 640;
+            canvas.height = 360;
+            
+
+            // Update the canvas with the countdown text
+            function drawCountdown() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                ctx.font = '40px Arial';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillStyle = 'white';
+                ctx.fillText(countdownEl.innerText, canvas.width / 2, canvas.height / 2);
+                ctx.fillText(discripter.innerText, canvas.width / 2, canvas.height / 2 + 100);
+                requestAnimationFrame(drawCountdown);
+            }
+            drawCountdown();
+
+            return canvas.captureStream();
+        }
+    </script>
+
+    <div class="thick-blue-bar"></div>
+    <div class="footer">
+        <div class="container">
+            <button id="darkModeToggle">Dark/Light mode (Beta)</button>
+            </div>
+            <w>w</w>
+        <div class="container">
+            <b>
+        <p><a href="/" target="_blank">Report an issue here.</a></p>
+        <w>w</w>
+        <p><a href="/about.html">About this website</a></p>
+        <w>w</w>
+        <p><a href="/">Go back home.</a></p>
+    </b>
+    </div>
+    </div>
+    <script>
+        // Check if dark mode was enabled last time
+        if (localStorage.getItem('darkMode') === 'enabled') {
+            document.body.classList.add('dark-mode');
+        }
+  
+        // Get the dark mode toggle button
+        const darkModeToggle = document.getElementById('darkModeToggle');
+  
+        // Toggle dark mode and save preference
+        darkModeToggle.addEventListener('click', () => {
+            document.body.classList.toggle('dark-mode');
+            if (document.body.classList.contains('dark-mode')) {
+                localStorage.setItem('darkMode', 'enabled');
+            } else {
+                localStorage.removeItem('darkMode');
+            }
+        });
+    </script>
 </body>
+</html>
