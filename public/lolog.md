@@ -1,5 +1,8 @@
 ### Lofi beta logs
 
+
+## THIS DOES NOT GET UPDATED!!! JUST LOOK AT THE COMMITS 
+
         * Logs:
 
         -- BASED ON BEATS v1.3
