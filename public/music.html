@@ -166,6 +166,43 @@
                 audioPlayer.currentTime = seekTime;
             }
         </script>
+        <script>
+            let isSeeking = false; // Flag to track if the user is interacting with the slider
+
+            // Update the slider and time display during playback
+            audioPlayer.addEventListener('timeupdate', () => {
+                if (!isSeeking) { // Only update the slider if the user is not interacting with it
+                    const currentMinutes = Math.floor(audioPlayer.currentTime / 60);
+                    const currentSeconds = Math.floor(audioPlayer.currentTime % 60);
+                    const durationMinutes = Math.floor(audioPlayer.duration / 60);
+                    const durationSeconds = Math.floor(audioPlayer.duration % 60);
+
+                    currentTimeElement.textContent = `${currentMinutes}:${currentSeconds.toString().padStart(2, '0')}`;
+                    durationElement.textContent = `${durationMinutes}:${durationSeconds.toString().padStart(2, '0')}`;
+                    timeBar.value = (audioPlayer.currentTime / audioPlayer.duration) * 100;
+                }
+            });
+
+            // Detect when the user starts interacting with the slider
+            timeBar.addEventListener('mousedown', () => {
+                isSeeking = true;
+            });
+
+            // Update the audio player's current time when the user releases the slider
+            timeBar.addEventListener('mouseup', () => {
+                isSeeking = false;
+                const seekTime = (timeBar.value / 100) * audioPlayer.duration;
+                audioPlayer.currentTime = seekTime;
+            });
+
+            // Update the current time while the user is dragging the slider
+            timeBar.addEventListener('input', () => {
+                const seekTime = (timeBar.value / 100) * audioPlayer.duration;
+                const currentMinutes = Math.floor(seekTime / 60);
+                const currentSeconds = Math.floor(seekTime % 60);
+                currentTimeElement.textContent = `${currentMinutes}:${currentSeconds.toString().padStart(2, '0')}`;
+            });
+        </script>
         
         
     </div>
