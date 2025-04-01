@@ -96,20 +96,20 @@
         </noscript>
         
         <w>w</w>
-        <a href="#" id="openModal">How to use the Pomodoro timer efficencly</a>
+        <a href="#" id="openDialog">How to use the Pomodoro timer efficiently</a>
         <p id="counter" class="increased-font"><b>-ㅤㅤㅤ-ㅤㅤㅤ-ㅤㅤㅤ-</b></p>
         
-        <div id="myModal" class="modal">
-            <div class="modal-content">
-                <span class="close">&times;</span>
-                <h2>How to use the Pomodoro timer efficencly</h2>
-                <o>o</o>
-                <p>The Pomodoro timer is a great way to divide your working time (focus time) and your free time (break time). Here are some examples for efficence use of the timer.</p>
-                <p>Set the focus timer for 20 minutes and the break timer for 10 minutes. This is a great choice for longer projects.</p>
-                <p>Set the focus timer for 10 minutes and the break timer for 5 minutes. This is a great choice for shorter projects.</p>
-                <p>During your focus time, work on your project or whatever you are working on. During your break time, you can do something like cleaning, or something lighter like doing a jigsaw puzzle or playing a game.</p>
-            </div>
-        </div>
+        <dialog id="infoDialog">
+            <h2>How to use the Pomodoro timer efficiently</h2>
+            <p>The Pomodoro timer is a great way to divide your working time (focus time) and your free time (break time). Here are some examples for efficient use of the timer:</p>
+            <ul>
+                <li>Set the focus timer for 20 minutes and the break timer for 10 minutes. This is a great choice for longer projects.</li>
+                <li>Set the focus timer for 10 minutes and the break timer for 5 minutes. This is a great choice for shorter projects.</li>
+                <li>During your focus time, work on your project or whatever you are working on. During your break time, you can do something like cleaning, or something lighter like doing a jigsaw puzzle or playing a game.</li>
+            </ul>
+            <button id="closeDialog">Close</button>
+        </dialog>
+        
         <p id="discripter">Focus Time | Break Time</p>
         <input type="number" id="minutes" placeholder="In minutes">
         <input type="number" id="break-minutes" placeholder="In minutes">
@@ -261,28 +261,6 @@
     </script>
     <script>
         // Get modal elements
-        const modal = document.getElementById("myModal");
-        const openModal = document.getElementById("openModal");
-        const closeModal = document.querySelector(".close");
-
-        // Open the modal when the link is clicked
-        openModal.addEventListener("click", (e) => {
-            e.preventDefault(); // Prevent default link behavior
-            modal.style.display = "block";
-        });
-
-        // Close the modal when the close button is clicked
-        closeModal.addEventListener("click", () => {
-            modal.style.display = "none";
-        });
-
-        // Close the modal when clicking outside the modal content
-        window.addEventListener("click", (e) => {
-            if (e.target === modal) {
-                modal.style.display = "none";
-            }
-        });
-
         const pipButton = document.getElementById('pipButton');
         const pipVideo = document.getElementById('pipVideo');
         document.getElementById("pipVideo").style.visibility = "hidden";
@@ -338,6 +316,29 @@
 
             return canvas.captureStream();
         }
+
+        // Get the dialog and buttons
+        const infoDialog = document.getElementById('infoDialog');
+        const openDialog = document.getElementById('openDialog');
+        const closeDialog = document.getElementById('closeDialog');
+
+        // Open the dialog when the link is clicked
+        openDialog.addEventListener('click', (e) => {
+            e.preventDefault(); // Prevent default link behavior
+            infoDialog.showModal(); // Open the dialog
+        });
+
+        // Close the dialog when the close button is clicked
+        closeDialog.addEventListener('click', () => {
+            infoDialog.close(); // Close the dialog
+        });
+
+        // Close the dialog when clicking outside the dialog content
+        infoDialog.addEventListener('click', (e) => {
+            if (e.target === infoDialog) {
+                infoDialog.close();
+            }
+        });
     </script>
 
     <div class="thick-blue-bar"></div>
