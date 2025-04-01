@@ -119,7 +119,7 @@
     <video id="pipVideo" style="display: none; width: 0; height: 0;" muted></video>
     <div id="timer">
         
-        <h1 class="timer" id="countdown">(Press Start)</h1>
+        <h1 class="timer" id="countdown" style="min-width: 200px;">(Press Start)</h1>
         
     </div>
     
@@ -127,6 +127,11 @@
         spacer
     </o>
     <script>
+        window.addEventListener('beforeunload', (event) => {
+            const confirmationMessage = 'Are you sure you want to leave this page? Your timer progress will be lost.';
+            event.returnValue = confirmationMessage; // Standard for most browsers
+            return confirmationMessage; // For older browsers
+        });
         let time = 0;
         let interval = null;
         let cycleCount = 0; // Variable to track completed cycles
@@ -204,7 +209,7 @@
                     countdownEl.innerHTML = 'Loading...';
                     discripter.innerHTML = 'Currently on Break Time';
                     if (Notification.permission === "granted") {
-                        new Notification("Break time is over! Starting focus time.");
+                        new Notification("Focus time is over! Starting break time.");
                     }
                     time = breakMinutes * 60;
                     interval = setInterval(() => updateCountdown(focusMinutes, breakMinutes), 1000);
@@ -213,7 +218,7 @@
                     audio.play();
                     discripter.innerHTML = 'Currently on Focus Time';
                     if (Notification.permission === "granted") {
-                        new Notification("Focus time is over! Starting break time.");
+                        new Notification("Break time is over! Starting focus time.");
                     }
                     time = focusMinutes * 60;
                     cycleCount++; // Increment the cycle count
@@ -308,8 +313,8 @@
         function countdownToVideoStream() {
             const canvas = document.createElement('canvas');
             const ctx = canvas.getContext('2d');
-            canvas.width = 640;
-            canvas.height = 360;
+            canvas.width = 660;
+            canvas.height = 200;
             
 
             // Update the canvas with the countdown text
@@ -319,8 +324,14 @@
                 ctx.textAlign = 'center';
                 ctx.textBaseline = 'middle';
                 ctx.fillStyle = 'white';
-                ctx.fillText(countdownEl.innerText, canvas.width / 2, canvas.height / 2);
-                ctx.fillText(discripter.innerText, canvas.width / 2, canvas.height / 2 + 100);
+                ctx.strokeStyle = 'white';
+                ctx.lineWidth = 5;
+                ctx.beginPath();
+                ctx.roundRect(0, 0, canvas.width, canvas.height, 20);
+                ctx.stroke();
+                ctx.strokeRect(0, 0, canvas.width, canvas.height);
+                ctx.fillText(countdownEl.innerText, canvas.width / 2, canvas.height / 2 - 20);
+                ctx.fillText(discripter.innerText, canvas.width / 2, canvas.height / 2 + 20);
                 requestAnimationFrame(drawCountdown);
             }
             drawCountdown();

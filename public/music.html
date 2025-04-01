@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Beats v1.41</title>
+    <title id="title-head">Beats v1.5</title>
     <link rel="stylesheet" type="text/css" href="style.css">
 </head>
 <body>
@@ -137,6 +137,7 @@
                 document.getElementById('title').innerText = `${track.title}`;
                 document.getElementById('artist').innerText = `By: ${track.artist}`;
                 document.getElementById('album').innerText = `Album: ${track.album}`;
+                document.getElementById('title-head').innerText = `${track.title}` + ` - Beats 1.5`;
 
                 // Update the current track information on the server
                 fetch('/current-track', {
@@ -178,7 +179,7 @@
                 <w>w</w>
                 <p><a href="/about.html">About this website</a></p>
                 <w>w</w>
-                <p><a href="/">Go back home.</a></p>
+                <p><a href="/" target="_blank">Go back home.</a></p>
                 
                 <style>
                     body {
@@ -234,7 +235,7 @@
                     });
                 </script>
                 <w>w</w>
-                <p><sub>Debug info: v1.41 PB:37sh3u:<span id="debugWaiting"></span>:<span id="rangeValue"></span>:<noscript>NS</noscript></sub></p>
+                <p><sub>Debug info: v1.5 PB:37sh3u:<span id="debugWaiting"></span>:<span id="rangeValue"></span>:<noscript>NS</noscript></sub></p>
                 <w>w</w>
                 <script>
                     const rangeValueElement = document.getElementById('rangeValue');
