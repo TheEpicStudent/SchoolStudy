@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notes App</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 10px;
+        }
+        #toolbar {
+            margin-bottom: 10px;
+        }
+        #toolbar button {
+            margin-right: 5px;
+            padding: 5px 10px;
+            cursor: pointer;
+        }
+        #editor {
+            border: 1px solid #ccc;
+            padding: 10px;
+            min-height: 300px;
+            outline: none;
+        }
+        button {
+            background-color: #a17373;
+            border: none;
+            cursor: pointer;
+            padding: 5px;
+        }
+    </style>
+    <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body>
+    <h1>Notes App</h1>
+    <p id="saved">-</p>
+    <p><i>The download as PDF may not work as intended.</i></p>
+    <p>Note: Clearing your browser history may result in the loss of your saved notes.</p>
+    <div id="toolbar"></div>
+    <button onclick="formatText('bold')">
+        <img src="icons/Text-Bold-256.png" alt="Bold" style="width: 10px; height: 10px;">
+    </button>
+    <button onclick="formatText('italic')">
+        <img src="icons/Text-Italic-256.png" alt="Italic" style="width: 10px; height: 10px;">
+    </button>
+    <button onclick="formatText('underline')">
+        <img src="icons/Underline-256.png" alt="Underline" style="width: 10px; height: 10px;">
+    </button>
+    <button onclick="formatText('h1')">
+        <p>Add Title</p>
+    </button>
+    <button onclick="saveNotes()">
+        <img src="icons/Save-256.png" alt="Save" style="width: 10px; height: 10px;">
+    </button>
+    <button onclick="downloadPdf()">
+        <img src="icons/Download-256.png" alt="Download as PDF" style="width: 10px; height: 10px;">
+    </button>
+    </div>
+    <div class="short-blue-bar"></div>
+    <div id="editor" class="editor" contenteditable="true">
+        Start typing your notes here...
+    </div>  
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+    <script>
+        const { jsPDF } = window.jspdf; // Access jsPDF from the UMD module
+    </script>
+    <script>
+        // Load notes from local storage when the page loads
+        window.onload = function() {
+            const savedNotes = localStorage.getItem('notes');
+            if (savedNotes) {
+                document.getElementById('editor').innerHTML = savedNotes;
+            }
+        };
+
+        // Save notes to local storage
+        function saveNotes() {
+            const editorContent = document.getElementById('editor').innerHTML;
+            localStorage.setItem('notes', editorContent);
+            document.getElementById('saved').innerText = 'Notes saved!';
+            setTimeout(() => {
+                document.getElementById('saved').innerText = '-';
+            }, 2000);
+        }
+        
+        //autosave
+        setInterval(() => {
+            const editorContent = document.getElementById('editor').innerHTML;
+            localStorage.setItem('notes', editorContent);
+            document.getElementById('saved').innerText = 'Autosaved!';
+            setTimeout(() => {
+                document.getElementById('saved').innerText = '-';
+            }, 2000);
+        }, 60000); 
+
+        // Format text in the editor
+        function formatText(command) {
+            const editor = document.getElementById('editor');
+            editor.focus(); // Ensure the editor is focused
+
+            const selection = window.getSelection();
+            if (!selection.rangeCount) return; // Exit if no text is selected
+
+            const range = selection.getRangeAt(0);
+            const selectedText = range.extractContents(); // Extract the selected text
+
+            let wrapper;
+            if (command === 'bold') {
+                wrapper = document.createElement('b');
+            } else if (command === 'italic') {
+                wrapper = document.createElement('i');
+            } else if (command === 'underline') {
+                wrapper = document.createElement('u');
+            } else if (command === 'h1') {
+                wrapper = document.createElement('h1');
+            }
+
+            if (wrapper) {
+                wrapper.appendChild(selectedText); // Wrap the selected text
+                range.insertNode(wrapper); // Insert the wrapped text back into the editor
+            }
+        }
+
+        // Download notes as a PDF file
+        
+        function downloadPdf() {
+            const editorContent = document.getElementById('editor').innerHTML;
+            const pdf = new jsPDF();
+
+            // Convert HTML content to plain text for PDF
+            const plainText = editorContent
+                .replace(/<b>(.*?)<\/b>/g, '$1')
+                .replace(/<i>(.*?)<\/i>/g, '$1')
+                .replace(/<u>(.*?)<\/u>/g, '$1')
+                .replace(/<h1>(.*?)<\/h1>/g, '$1')
+                .replace(/<div>|<\/div>|<br>/g, '\n')
+                .replace(/<[^>]+>/g, '');
+
+            pdf.text(plainText, 10, 10);
+            pdf.save('notes.pdf');
+        }
+    </script> 
+     <div class="thick-blue-bar"></div>
+     <div class="footer">
+         <div class="container">
+             <button id="darkModeToggle">Dark/Light mode (Beta)</button>
+             </div>
+             <w>w</w>
+         <div class="container">
+             <b>
+         <p><a href="/" target="_blank">Report an issue here.</a></p>
+         <w>w</w>
+         <p><a href="/about.html">About this website</a></p>
+         <w>w</w>
+         <p><a href="/">Go back home.</a></p>
+     </b>
+     </div>
+     </div>
+     <script>
+         // Check if dark mode was enabled last time
+         if (localStorage.getItem('darkMode') === 'enabled') {
+             document.body.classList.add('dark-mode');
+         }
+   
+         // Get the dark mode toggle button
+         const darkModeToggle = document.getElementById('darkModeToggle');
+   
+         // Toggle dark mode and save preference
+         darkModeToggle.addEventListener('click', () => {
+             document.body.classList.toggle('dark-mode');
+             if (document.body.classList.contains('dark-mode')) {
+                 localStorage.setItem('darkMode', 'enabled');
+             } else {
+                 localStorage.removeItem('darkMode');
+             }
+         });
+     </script>
+</body>
+</html>
