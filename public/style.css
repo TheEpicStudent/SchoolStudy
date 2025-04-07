@@ -343,3 +343,53 @@ dialog button:hover {
         width: 90%;
     }
 }
+
+body {
+    transition: background-color 1s, color 1s;
+}
+.dark-mode {
+    background-color: #121212;
+    color: #ffffff;
+}
+.dark-mode .thick-blue-bar,
+.dark-mode .short-blue-bar,
+.dark-mode .thin-blue-bar {
+    background-color: #b25ec9;
+}
+.dark-mode button {
+    background-color: #855193;
+    color: #ffffff;
+}
+.dark-mode a {
+    color: #9240a9;
+}
+.dark-mode input[type="range"] {
+    background-color: #949494;
+}
+.dark-mode input[type="range"]::-webkit-slider-thumb {
+    background-color: #854297;
+}
+.dark-mode input[type="range"]::-moz-range-thumb {
+    background-color: #854297;
+}
+.dark-mode a:visited {
+    color: #c98add;
+}
+.dark-mode button:hover {
+    background-color: #633171
+}
+
+.dark-mode .editor {
+    background-color: #1c1c1c;
+    border-color: #aaa;
+    border-radius: 5px; 
+    height: 500px;
+}
+#currentTrack {
+    background: rgba(0, 0, 0, 0.5);
+    padding: 10px;
+    border-radius: 10px;
+    margin: 20px;
+    position: absolute;
+    align-self: center;
+}

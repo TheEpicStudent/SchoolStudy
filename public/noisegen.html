@@ -1,59 +1,153 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Noise Generator</title>
-    <link rel="stylesheet" type="text/css" href="noise.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" type="text/css" href="style.css">
+  <title>Sound Generator</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      overflow: hidden;
+      background-color: black;
+      color: white;
+      font-family: Arial, sans-serif;
+    }
+
+    #background {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      background-size: cover;
+      background-position: center;
+    }
+
+    #controls {
+      text-align: center;
+      padding: 20px;
+    }
+
+    button {
+      margin: 10px;
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    dropdown {
+      margin: 10px;
+      padding: 10px;
+      font-size: 16px;
+    }
+    h1 {
+      margin-bottom: 20px;
+    }
+    select {
+      padding: 10px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    option {
+      padding: 10px;
+      font-size: 16px;
+    }
+    #audio {
+      display: none;
+    }
+  </style>
 </head>
 <body>
-    <div id="currentTrack">
-        <p id="noiseName"></p>
-        <button id="prevNoise">↼</button>
-        <button id="nextNoise">⇀</button>
-        <p>THIS IS NOT WORKING! I WILL FIX IT! SOON! </p>
-    </div>
-    <script>
-        const noises = ['noise/rain.mp3', 'noise/white.mp3', 'noise/noise3.mp3'];
-        let currentNoiseIndex = 0;
+  <div id="background"></div>
+  <div id="currentTrack">
+  <div id="controls">
+    <h1>Sound Generator</h1>
+    <select id="soundSelector" onchange="playSound(this.value)">
+      <option value="" disabled selected>Select a sound</option>
+      <option value="rain">Rain</option>
+      <option value="fire">Fireplace</option>
+      <option value="ocean">Ocean</option>
+    <option value="wind">Wind</option>
+    <option value="rainforest">Rainforest</option>
+    <option value="thunder">Thunder</option>
+    <option value="city">City Sounds</option>
+    </select>
+    <p style="opacity: 0;">Hello there.</p>
+    <p><u><a href="/" style="color: white;">Go Back Home</a></u></p>
+    <p><u><a href="https://github.com/TheEpicStudent/SchoolStudy/issues" style="color: white;">Report an issue</a></u></p>
+  </div>
+</div>
 
-        const noisePlayer = document.getElementById('noisePlayer');
-        const prevNoiseButton = document.getElementById('prevNoise');
-        const nextNoiseButton = document.getElementById('nextNoise');
-        const noiseNameElement = document.getElementById('noiseName');
-        const backgroundVideo = document.getElementById('backgroundVideo');
+  <audio id="audio" loop></audio>
 
-        function updateNoise() {
-            const currentNoise = noises[currentNoiseIndex];
-            noisePlayer.src = currentNoise;
-            noisePlayer.play();
-            noiseNameElement.innerText = currentNoise.split('/').pop();
-            const videoName = currentNoise.replace('.mp3', '.mp4');
-            videoSource.src = videoName;
-            backgroundVideo.src = videoName;
+  <script>
+    const sounds = {
+      rain: {
+        gif: 'https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/a65ba4b9-1250-4c8e-94ed-f2691c2fcaff/dcn8atn-879f23b2-2476-4cb2-98e1-8135f96bd1c1.gif?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiJcL2ZcL2E2NWJhNGI5LTEyNTAtNGM4ZS05NGVkLWYyNjkxYzJmY2FmZlwvZGNuOGF0bi04NzlmMjNiMi0yNDc2LTRjYjItOThlMS04MTM1Zjk2YmQxYzEuZ2lmIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.XfVl5Xu6KiuDf-s30AsdfkzW2ghIyFvyEB9CdKyOT6o',
+        audio: 'https://www.soundjay.com/nature/rain-01.mp3'
+      },
+      fire: {
+        gif: 'https://www.lovethispic.com/uploaded_images/203050-Burning-Fire.gif',
+        audio: 'https://www.soundjay.com/nature/sounds/campfire-1.mp3'
+      },
+      ocean: {
+        gif: 'https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/c2353506-4d20-4fe6-8a3f-47d8c90bda35/d3fopzg-f29cef95-743c-4cd2-8bf9-6115b9127649.gif?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiJcL2ZcL2MyMzUzNTA2LTRkMjAtNGZlNi04YTNmLTQ3ZDhjOTBiZGEzNVwvZDNmb3B6Zy1mMjljZWY5NS03NDNjLTRjZDItOGJmOS02MTE1YjkxMjc2NDkuZ2lmIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.9cVcw2Udz_3zChhrh1lF2_Ah0-RNSZjV0pfeLSEohE4',
+        audio: 'https://www.soundjay.com/nature/ocean-wave-1.mp3'
+      },
+        wind: {
+            gif: 'https://media1.tenor.com/images/4524545261ca9dbae1a1f553213780ab/tenor.gif?itemid=8387865',
+            audio: 'https://www.soundjay.com/nature/wind-1.mp3'
+        },
+        rainforest: {
+            gif: '/noise/forest.gif',
+            audio: 'https://cdn.uppbeat.io/audio-files/57ef60eab5fd4218838423222dc07d99/7a08fe54739f3a2f701eedd28f2d68d9/691bcb21d1700c76e26ff9b9ef8d897d/STREAMING-rainforest-ambience-birds-insects-fascinatedsound-1-01-29.mp3'
+        },
+        thunder: {
+            gif: 'https://giffiles.alphacoders.com/136/13671.gif',
+            audio: 'https://soundbible.com/mp3/2_Minute_Thunderstorm-Mike_Koenig-574654058.mp3'
+        },
+        city: {
+            gif: 'https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/c2353506-4d20-4fe6-8a3f-47d8c90bda35/d42a1i3-9a1d4481-6ecd-437b-9280-7a6f7d5e2e8c.gif?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiJcL2ZcL2MyMzUzNTA2LTRkMjAtNGZlNi04YTNmLTQ3ZDhjOTBiZGEzNVwvZDQyYTFpMy05YTFkNDQ4MS02ZWNkLTQzN2ItOTI4MC03YTZmN2Q1ZTJlOGMuZ2lmIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.rLYGjJAlAovLuBvipaBlDO8LjYEwNgqmsTw7__PPNnw',
+            audio: 'https://www.soundjay.com/ambient/sounds/shopping-square-1.mp3'
         }
+    };
 
-        prevNoiseButton.addEventListener('click', () => {
-            currentNoiseIndex = (currentNoiseIndex - 1 + noises.length) % noises.length;
-            updateNoise();
-        });
+    function playSound(type) {
+      const background = document.getElementById('background');
+      const audio = document.getElementById('audio');
 
-        nextNoiseButton.addEventListener('click', () => {
-            currentNoiseIndex = (currentNoiseIndex + 1) % noises.length;
-            updateNoise();
-        });
+      if (sounds[type]) {
+        background.style.transition = 'opacity 1s ease-in-out';
+        background.style.opacity = 0;
 
-        // Initialize with the first noise
-        updateNoise();
-    </script>
-    <audio id="noisePlayer" style="display:none;" controls>
-        <source src="noise.mp3" type="audio/mpeg">
-        Your browser does not support the audio element.
-    </audio>
-    <p><b><a href="/credit.html">Credits</a></b></p>
-    <video autoplay muted loop id="backgroundVideo" style="position: fixed; right: 0; bottom: 0; min-width: 100%; min-height: 100%;">
-        <source id="videoSource" src="" type="video/mp4">
-        Your browser does not support the video tag.
-    </video>
+        setTimeout(() => {
+          background.style.backgroundImage = `url(${sounds[type].gif})`;
+          background.style.opacity = 1;
+        }, 1000);
+
+        audio.src = sounds[type].audio;
+        audio.volume = 0;
+        audio.play();
+
+        let volume = 0;
+        const fadeIn = setInterval(() => {
+          if (volume < 1) {
+            volume += 0.1;
+            audio.volume = Math.min(volume, 1);
+            console.log(`Volume: ${audio.volume}`);
+          } else {
+            clearInterval(fadeIn);
+          }
+        }, 100); // Adjust the interval for smoother or faster fade-in
+      }
+    }
+  </script>
 </body>
 </html>
