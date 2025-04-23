@@ -62,6 +62,8 @@
     #audio {
       display: none;
     }
+    
+
   </style>
 </head>
 <body>
@@ -74,12 +76,19 @@
       <option value="rain">Rain</option>
       <option value="fire">Fireplace</option>
       <option value="ocean">Ocean</option>
-    <option value="wind">Wind</option>
-    <option value="rainforest">Rainforest</option>
-    <option value="thunder">Thunder</option>
-    <option value="city">City Sounds</option>
+      <option value="wind">Wind</option>
+      <option value="rainforest">Rainforest</option>
+      <option value="thunder">Thunder</option>
+      <option value="city">City Sounds</option>
+      <option value="white">White Noise</option>
+      <option value="river">River</option>
     </select>
+
     <p style="opacity: 0;">Hello there.</p>
+    <p>Volume</p>
+    <div class="noisegen">
+    <input type="range" class="noisegen" id="volume" min="0" max="1" step="0.1" value="0.5" style="width: 200px; appearance: none; background: white; accent-color: white;" onchange="document.getElementById('audio').volume = this.value;">
+    </div>
     <p><u><a href="/" style="color: white;">Go Back Home</a></u></p>
     <p><u><a href="https://github.com/TheEpicStudent/SchoolStudy/issues" style="color: white;">Report an issue</a></u></p>
   </div>
@@ -114,38 +123,62 @@
             audio: 'https://soundbible.com/mp3/2_Minute_Thunderstorm-Mike_Koenig-574654058.mp3'
         },
         city: {
-            gif: 'https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/c2353506-4d20-4fe6-8a3f-47d8c90bda35/d42a1i3-9a1d4481-6ecd-437b-9280-7a6f7d5e2e8c.gif?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiJcL2ZcL2MyMzUzNTA2LTRkMjAtNGZlNi04YTNmLTQ3ZDhjOTBiZGEzNVwvZDQyYTFpMy05YTFkNDQ4MS02ZWNkLTQzN2ItOTI4MC03YTZmN2Q1ZTJlOGMuZ2lmIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.rLYGjJAlAovLuBvipaBlDO8LjYEwNgqmsTw7__PPNnw',
+            gif: '/noise/city.gif',
             audio: 'https://www.soundjay.com/ambient/sounds/shopping-square-1.mp3'
+        },
+        white: {
+            gif: '/noise/nightsky.gif',
+            audio: 'https://www.soundjay.com/misc/sounds/white-noise-05.mp3'
         }
     };
 
     function playSound(type) {
       const background = document.getElementById('background');
       const audio = document.getElementById('audio');
+      const volumeControl = document.getElementById('volume');
+      const volume = volumeControl.value;
+      audio.volume = volume;
 
       if (sounds[type]) {
-        background.style.transition = 'opacity 1s ease-in-out';
-        background.style.opacity = 0;
+      // Fade out the current sound
+      if (!audio.paused) {
+        let volume = audio.volume;
+        const fadeOut = setInterval(() => {
+        if (volume > 0) {
+          volume -= 0.1;
+          audio.volume = Math.max(volume, 0);
+        } else {
+          clearInterval(fadeOut);
+          audio.pause();
+          audio.src = ''; // Clear the current audio source
+        }
+        }, 100); // Adjust the interval for smoother or faster fade-out
+      }
 
-        setTimeout(() => {
-          background.style.backgroundImage = `url(${sounds[type].gif})`;
-          background.style.opacity = 1;
-        }, 1000);
+      // Change background and play new sound
+      background.style.transition = 'opacity 1s ease-in-out';
+      background.style.opacity = 0;
 
+      setTimeout(() => {
+        background.style.backgroundImage = `url(${sounds[type].gif})`;
+        background.style.opacity = 1;
+      }, 1000);
+
+      setTimeout(() => {
         audio.src = sounds[type].audio;
         audio.volume = 0;
         audio.play();
 
         let volume = 0;
         const fadeIn = setInterval(() => {
-          if (volume < 1) {
-            volume += 0.1;
-            audio.volume = Math.min(volume, 1);
-            console.log(`Volume: ${audio.volume}`);
-          } else {
-            clearInterval(fadeIn);
-          }
+        if (volume < 1) {
+          volume += 0.1;
+          audio.volume = Math.min(volume, 1);
+        } else {
+          clearInterval(fadeIn);
+        }
         }, 100); // Adjust the interval for smoother or faster fade-in
+      }, 1000); // Delay to ensure fade-out completes before starting new sound
       }
     }
   </script>

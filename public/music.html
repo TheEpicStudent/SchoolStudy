@@ -2,7 +2,8 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title id="title-head">Beats v1.5</title>
     <link rel="stylesheet" type="text/css" href="style.css">
 </head>
@@ -92,7 +93,7 @@
         <o>spacer</o>
         <o>spacer</o>
         <o>spacer</o>
-        
+    <!-- the <o> tags are defined in the css (and also the <w> tags)-->
         <script>
             let musicFiles = [];
 
@@ -189,11 +190,13 @@
             });
 
             // Update the audio player's current time when the user releases the slider
-            timeBar.addEventListener('mouseup', () => {
+            const stopSeeking = () => {
                 isSeeking = false;
                 const seekTime = (timeBar.value / 100) * audioPlayer.duration;
                 audioPlayer.currentTime = seekTime;
-            });
+            };
+            timeBar.addEventListener('mouseup', stopSeeking);
+            timeBar.addEventListener('touchend', stopSeeking); // Added for mobile devices
 
             // Update the current time while the user is dragging the slider
             timeBar.addEventListener('input', () => {
