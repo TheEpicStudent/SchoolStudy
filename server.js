@@ -4,6 +4,10 @@ const path = require('path');
 const url = require('url');
 
 const port = 3000;
+let counterMusic = 0;
+let counterNoise = 0;
+let counterNotes = 0;
+let counterTimer = 0;
 
 let currentTrack = {
     title: '',
@@ -47,7 +51,8 @@ const server = http.createServer((req, res) => {
             } else {
                 res.writeHead(200, { 'Content-Type': 'text/html' });
                 res.end(data, 'utf-8');
-                console.log('got music.html')
+                counterMusic = counterMusic + 1;
+                console.log(`got music.html, ${counterMusic}`)
             }
         });
     } else if (pathname === '/noisegen' && req.method === 'GET') {
@@ -59,7 +64,8 @@ const server = http.createServer((req, res) => {
             } else {
                 res.writeHead(200, { 'Content-Type': 'text/html' });
                 res.end(data, 'utf-8');
-                console.log('got noisegen.html')
+                counterNoise = counterNoise + 1;
+                console.log(`got noisegen.html, ${counterNoise}`)
             }
         });
     } else if (pathname === '/notes' && req.method === 'GET') {
@@ -71,7 +77,8 @@ const server = http.createServer((req, res) => {
             } else {
                 res.writeHead(200, { 'Content-Type': 'text/html' });
                 res.end(data, 'utf-8');
-                console.log('got notes.html')
+                counterNotes = counterNotes + 1;
+                console.log(`got notes.html, ${counterNotes}`)
             }
         });
     } else if (pathname === '/timer' && req.method === 'GET') {
@@ -83,9 +90,33 @@ const server = http.createServer((req, res) => {
             } else {
                 res.writeHead(200, { 'Content-Type': 'text/html' });
                 res.end(data, 'utf-8');
-                console.log('got timer.html')
+                counterTimer = counterTimer + 1;
+                console.log(`got timer.html, ${counterTimer}`)
+                //console.log('got timer.html')
             }
         });
+    } else if (pathname === '/sum' && req.method === 'GET') {
+        console.info(`All of it, summed up:
+            ${counterMusic} times music.html
+            ${counterNoise} times noisegen.html
+            ${counterNotes} times notes.html
+            ${counterTimer} times timer.html`)
+        res.writeHead(200, { 'Content-Type': 'text/html' });
+        res.end(`
+            <html>
+                <head>
+                    <title>yay</title>
+                    <link rel="stylesheet" type="text/css" href="style.css">
+                </head>
+                <body>
+                <div class="container">
+                <w>w</w>
+                    <p>you found a dev feature good job!!!!!1!!11!!</p>
+                    <p>here is a gift for you!!1!</p>
+                    <p>*the exitement of a dev feature found*</p>
+                </div>
+                </body>
+            </html>`);
     } else {
         let filePath = path.join(__dirname, 'public', pathname === '/' ? 'index.html' : pathname);
         const extname = String(path.extname(filePath)).toLowerCase();
@@ -98,6 +129,7 @@ const server = http.createServer((req, res) => {
                         res.writeHead(404, { 'Content-Type': 'text/html' });
                         res.end(content, 'utf-8');
                         console.error(`got 404 at ${filePath}`)
+                        console.error(`make sure that the file exists or that the path is correct`)
                     });
                 } else {
                     res.writeHead(500);
@@ -114,5 +146,6 @@ const server = http.createServer((req, res) => {
 server.listen(port, () => {
     console.log(`Server is listening on port http://localhost:${port}`);
     console.info(`Server is running in ${process.env.NODE_ENV || 'development'} mode`);
-    console.log('Btw if you didnt know, you can press Ctrl+C to stop the server');
+    console.log('going to /sum will show you how many times each page was loaded');
+    //please dont spam it
 });
