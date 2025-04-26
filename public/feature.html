@@ -66,7 +66,7 @@
             document.getElementById('subhead').innerHTML = '';
 
             // Send the data to your MongoDB database
-            fetch('mongodb://mongo:vaXKCtTNexnEfGljEeaugHPjOVWurCEZ@interchange.proxy.rlwy.net:27921', {
+            fetch(`${MONGO_URL_USE}/api/submitFeature`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
