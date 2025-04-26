@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <title>Request a feature</title>
+</head>
+<body>
+    <style>
+        textarea {
+            width: 75%;
+            height: 100px;
+            resize: none;
+            font-family: Arial, sans-serif;
+            text-box-edge: 5px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 10px;
+            font-weight: bold;
+        }
+        input[type="text"] {
+            width: 15%;
+            height: 20px;
+            resize: none;
+            font-family: Arial, sans-serif;
+            text-box-edge: 5px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 10px;
+            font-weight: bold;
+        }
+    </style>
+    <div class="thick-blue-bar"></div>
+    <div class="container">
+        <h1 id="head">Request a feature</h1>
+        <w>w</w>
+        <p id="subhead">Here, you can request a feature to be added to School Studies:</p>
+        <form id="featureRequestForm">
+            <label for="feature">Feature:</label>
+            <br>
+            <input type="text" id="feature" name="feature" required>
+            <br><br>
+            <label for="description">Description:</label>
+            <br>
+            <textarea id="description" name="description" rows="4" cols="50" required></textarea>
+            <br><br>
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+    <script>
+        if (localStorage.getItem('submitted') === 'yes') {
+            alert('You have already submitted a feature request.');
+            innerhtml = '<br><h1>Feature Request Already Submitted</h1><p>Thank you for your request! We will review it soon.</p>';
+            document.getElementById('featureRequestForm').innerHTML = innerhtml;
+            document.getElementById('head').innerHTML = '';
+            document.getElementById('subhead').innerHTML = '';
+      }
+        document.getElementById('featureRequestForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const feature = document.getElementById('feature').value;
+            const description = document.getElementById('description').value;
+            innerhtml = '<br><h1>Feature Request Submitted</h1><p>Thank you for your request! We will review it soon.</p>';
+            document.getElementById('featureRequestForm').innerHTML = innerhtml;
+            document.getElementById('head').innerHTML = '';
+            document.getElementById('subhead').innerHTML = '';
+
+            // Send the data to your MongoDB database
+            fetch('mongodb://mongo:vaXKCtTNexnEfGljEeaugHPjOVWurCEZ@interchange.proxy.rlwy.net:27921', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ feature, description })
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Failed to submit feature request');
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log('Feature request submitted successfully:', data);
+            })
+            .catch(error => {
+                console.error('Error submitting feature request:', error);
+            });
+
+            // Set localStorage item to indicate submission
+            localStorage.setItem('submitted', 'yes');
+        });
+    </script>
+</body>
+</html>

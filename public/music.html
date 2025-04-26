@@ -37,11 +37,11 @@
         </div>
         <o>spacer</o>
         <div class="short-blue-bar"></div>
-        <p><a href="/screensaver.html" target="_blank"><b>Open the screensaver here!</b></a> (This will open in a new tab).</p>
-        <p><a href="/focus.html" target="_blank"><b>Open Focus mode here.</b></a> (Click to fullscreen in tab, press ESC to exit.)</p>
-        <div class="short-blue-bar"></div>
+        <p id="timed1"><a href="/screensaver.html" target="_blank"><b>Open the screensaver here!</b></a> (This will open in a new tab).</p>
+        <p id="timed2"><a href="/focus.html" target="_blank"><b>Open Focus mode here.</b></a> (Click to fullscreen in tab, press ESC to exit.)</p>
+        <div id="timed1" class="short-blue-bar"></div>
         <input type="range" id="timeBar" value="0" max="100" step="1" oninput="seekAudio()">
-        <p><time id="currentTime">0:00</time> / <time id="duration">0:00</time> <span id="mutedIndicator" style="display:none;">Muted!</span></p>
+        <p class="centered"><time id="currentTime">0:00</time> / <time id="duration">0:00</time> <span id="mutedIndicator" style="display:none;">Muted!</span></p>
         <script>
             const audioPlayer = document.getElementById('audioPlayer');
             const timeBar = document.getElementById('timeBar');
@@ -83,9 +83,11 @@
                 //}
             });
         </script>
+        <div class="centered">
         <button onclick="shuffleAndPlay()">››</button>
         <button id="playPauseButton" onclick="togglePlayPause()">▶</button>
         <button onclick="document.getElementById('audioPlayer').muted = !document.getElementById('audioPlayer').muted">🔇</button>
+        </div> 
         <o>spacer</o>
         <o>spacer</o>
         <o>spacer</o>
@@ -94,6 +96,30 @@
         <o>spacer</o>
         <o>spacer</o>
     <!-- the <o> tags are defined in the css (and also the <w> tags)-->
+        <script>
+            const timed1 = document.getElementById('timed1');
+            const timed2 = document.getElementById('timed2');
+            let timed1opacity = 100;
+            let timed2opacity = 100;
+            timed1.style.opacity = '100%';
+            timed2.style.opacity = '100%';
+
+            setTimeout(() => {
+                const fadeOutInterval = setInterval(() => {
+                    if (timed1opacity <= 25 && timed2opacity <= 25) {
+                        clearInterval(fadeOutInterval);
+                        timed1.style.opacity = '25%';
+                        timed2.style.opacity = '25%';
+                    } else {
+                        timed1opacity -= 6.25;
+                        timed2opacity -= 6.25;
+                        timed1.style.opacity = timed1opacity + '%';
+                        timed2.style.opacity = timed2opacity + '%';
+                    }
+                }, 1000);
+            }, 20000);
+
+        </script>
         <script>
             let musicFiles = [];
 

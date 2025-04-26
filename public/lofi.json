@@ -1,6 +1,18 @@
 [
     { "src": "music/lofi/Veil.mp3", "title": "Veil", "artist": "Tem.Polor", "album": "Lofi Classics" },
-    { "src": "music/lofi/Wandering Through City Lights.mp3", "title": "Wandering Through City Lights", "artist": "Tem.Polor", "album": "Lofi Classics" },
-    { "src": "music/lofi/Waves of Serenity.mp3", "title": "Waves of Serenity", "artist": "Tem.Polor", "album": "Lofi Classics" },
-    { "src": "music/lofi/Euphoria.mp3", "title": "Euphoria", "artist": "Tem.Polor", "album": "Lofi Classics" }
+    { "src": "music/lofi/Wandering-Through-City-Lights.mp3", "title": "Wandering Through City Lights", "artist": "Tem.Polor", "album": "Lofi Classics" },
+    { "src": "music/lofi/Waves-of-Serenity.mp3", "title": "Waves of Serenity", "artist": "Tem.Polor", "album": "Lofi Classics" },
+    { "src": "music/lofi/Euphoria.mp3", "title": "Euphoria", "artist": "Tem.Polor", "album": "Lofi Classics" },
+    { "src": "music/Lofi/Another-Kid-&-Pratzapp---Kyoto-(freetouse.com).mp3", "title": "Kyoto", "artist": "Another Kid & Pratzapp", "album": "N/A" },
+    { "src": "music/lofi/Avanti---Time-(freetouse.com).mp3", "title": "Time", "artist": "Avanti", "album": "N/A" },
+    { "src": "music/lofi/Aventure---A-Beautiful-Garden-(freetouse.com).mp3", "title": "A Beautiful Garden", "artist": "Aventure", "album": "N/A" },
+    { "src": "music/lofi/Filo-Starquez---Park-Vibes-(freetouse.com).mp3", "title": "Park Vibes", "artist": "Filo Starquez", "album": "N/A" },
+    { "src": "music/lofi/Hazelwood---Coming-Of-Age-(freetouse.com).mp3", "title": "Coming Of Age", "artist": "Hazelwood", "album": "N/A" },
+    { "src": "music/lofi/Hoffy-Beats---Florida-Keys-(freetouse.com).mp3", "title": "Florida Keys", "artist": "Hoffy Beats", "album": "N/A" },
+    { "src": "music/lofi/Lukrembo---Jay-(freetouse.com).mp3", "title": "Jay", "artist": "Lukrembo", "album": "N/A" },
+    { "src": "music/lofi/Lukrembo---Marshmallow-(freetouse.com).mp3", "title": "Marshmallow", "artist": "Lukrembo", "album": "N/A" },
+    { "src": "music/lofi/massobeats---daydream-(freetouse.com).mp3", "title": "daydream", "artist": "massobeats", "album": "N/A" },
+    { "src": "music/lofi/massobeats---gingersweet-(freetouse.com).mp3", "title": "gingersweet", "artist": "massobeats", "album": "N/A" },
+    { "src": "music/lofi/Milky-Wayvers---Love-in-Japan-(freetouse.com).mp3", "title": "Love in Japan", "artist": "Milky Wayvers", "album": "N/A" },
+    { "src": "music/lofi/Pufino---Dreamy-Skies-(freetouse.com).mp3", "title": "Dreamy Skies", "artist": "Pufino", "album": "N/A" }
 ]

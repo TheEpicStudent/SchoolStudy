@@ -3,27 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lofi Beta-v1.4</title>
+    <title>Lofi Beta-v1.5</title>
     <link rel="stylesheet" type="text/css" href="lofistyle.css">
 </head>
 <body>
     <div class="thick-blue-bar"></div>
     <div class="container">
-        <h1>Beats: Lofi</h1>
-        <p>The Lofi Beats app is currently in it's <b>beta</b> stage, so bugs and issues might be encountered.</p>
-        <p><i>I'm pretty sure you shouldn't be seeing this page, but whatever.</i></p>
-        <p> </p>
-        <p><i>Currently Playing:</i></p>
-        <p> </p>
-        <audio id="audioPlayer" style="display:none;" autoplay></audio>
-        <div id="metadata">
-            <p id="title"></p>
-            <p id="artist"></p>
-            <p id="album"></p>
+        <div class="centered">
+        <h1>Lofi Beats</h1>
         </div>
-        <div class="short-blue-bar"></div>
-        <input type="range" id="timeBar" value="0" max="100" step="1" oninput="seekAudio()">
-        <p><time id="currentTime">0:00</time> / <time id="duration">0:00</time></p>
+        <div class="thin-blue-bar"></div>
+        <div class="footer">
+        <div class="mooter">
+            <p>Current Time: <span id="currentTime">0:00</span></p>
+            <p>Duration: <span id="duration">0:00</span></p>
+            <p>Volume: <span id="volume">100</span>%</p>
+            <input id="timeBar" type="range" min="0" max="100" value="0" onchange="seekAudio()">
+            <audio id="audioPlayer" controls style="display:none;"></audio>
+        
         <script>
             const currentTimeElement = document.getElementById('currentTime');
             const durationElement = document.getElementById('duration');
@@ -47,9 +44,12 @@
                 shuffleAndPlay();
             });
         </script>
+        <div class ="centered">
         <button onclick="shuffleAndPlay()">››</button>
         <button id="playPauseButton" onclick="togglePlayPause()">▶</button>
-        <button onclick="document.getElementById('audioPlayer').muted = !document.getElementById('audioPlayer').muted">🔇</button>
+        <button onclick="document.getElementById('audioPlayer').muted = !document.getElementById('audioPlayer').muted" disabled="true" >🔇</button>
+        </div>
+    </div>
         <!-- <div class="short-blue-bar"></div><p>Volume: <span id="volume">100</span>%</p>
          <p><span id="d"></span></p>
         
@@ -127,12 +127,12 @@
             audioPlayer.currentTime = seekTime;
         }
     </script>
-    
+    </div>
     <div class="thin-blue-bar"></div>
 <div class="center">
-        <p><a href="/lofilogs">Logs and Current Problems</a></p>
+        <!--<p><a href="/lofilogs">Logs and Current Problems</a></p>
         <p><a href="/">            Go back</a></p>
-        <p><sub>Debug info: beta-v1.4 (based on beats v1.3) PB:37sh3u:<span id="debugWaiting"></span>:<span id="rangeValue"></span></sub></p>
+        <p><sub>Debug info: beta-v1.5 (based on beats v1.3) PB:37sh3u:<span id="debugWaiting"></span>:<span id="rangeValue"></span></sub></p>
         <script>
             const rangeValueElement = document.getElementById('rangeValue');
             timeBar.addEventListener('input', () => {
@@ -148,6 +148,7 @@
             debugWaitingElement.textContent = 'false';
             });
         </script>
+    -->
 </div>
 </body>
 </html>
