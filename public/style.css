@@ -5,6 +5,19 @@
     box-sizing: border-box;
 }
 
+.warning-banner {
+    background-color: #ffcc00; /* Yellow background */
+    color: #000; /* Black text */
+    padding: 10px;
+    text-align: center;
+    font-weight: bold;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000; /* Ensure it stays on top */
+}
+
 /* Body styling */
 body {
     font-family: 'Arial', sans-serif;
@@ -367,7 +380,7 @@ body {
 }
 .dark-mode {
     background-color: #121212;
-    color: #ffffff;
+    color: #000000;
 }
 .dark-mode .thick-blue-bar,
 .dark-mode .short-blue-bar,
@@ -433,4 +446,171 @@ body {
 }
 .lazy-horizontal-stack > * {
     margin: 10px; /* Space between items */
+}
+checkbox {
+    margin-right: 10px;
+    padding-bottom: 15px;
+}
+/* Style for the checkbox */
+checkbox {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+    padding-bottom: 15px;
+}
+checkbox input[type="checkbox"] {
+    margin-right: 10px;
+    padding-bottom: 15px;
+}
+
+
+/* Page Layout */
+.page-wrapper {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.main-content {
+    flex: 1 0 auto;
+    padding-bottom: 60px; /* Ensure space before footer */
+}
+
+.header-section {
+    margin-bottom: 20px;
+}
+
+/* Hero Section */
+.hero-section {
+    text-align: center;
+    margin: 40px 0;
+}
+
+.hero-section h1 {
+    font-size: 2.5em;
+    margin-bottom: 15px;
+    color: #333;
+}
+
+.hero-section p {
+    font-size: 1.2em;
+    margin-bottom: 20px;
+    color: #666;
+}
+
+/* Apps Section */
+.apps-section {
+    margin: 40px 0;
+}
+
+.app-item {
+    margin: 30px 0;
+    padding: 20px 0;
+}
+
+.app-item p {
+    margin: 10px 0;
+    line-height: 1.6;
+}
+
+.app-item p:first-child {
+    font-size: 1.1em;
+}
+
+/* Info Section */
+.info-section {
+    margin: 40px 0;
+    padding: 20px 0;
+}
+
+.info-section p {
+    margin: 15px 0;
+    line-height: 1.6;
+}
+
+/* Content Spacer */
+.content-spacer {
+    height: 80px; /* Extra space before footer */
+}
+
+/* Footer Improvements */
+.footer {
+    flex-shrink: 0;
+    background: #333;
+    color: #ffffff;
+    padding: 20px 0;
+    margin-top: auto;
+}
+
+.footer-content {
+    text-align: center;
+}
+
+.footer-links {
+    margin: 15px 0;
+}
+
+.footer-links p {
+    margin: 8px 0;
+}
+
+.footer-emoji {
+    display: block;
+    font-size: 1.2em;
+    margin: 10px 0;
+    color: #ffffff !important;
+}
+
+/* Dark Mode Improvements */
+.dark-mode .hero-section h1 {
+    color: #ffffff;
+}
+
+.dark-mode .hero-section p {
+    color: #cccccc;
+}
+
+.dark-mode .footer {
+    background: #1a1a1a;
+}
+
+.dark-mode .warning-banner {
+    background-color: #444400;
+    color: #ffffff;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .container {
+        width: 95%;
+        padding: 0 10px;
+    }
+    
+    .hero-section h1 {
+        font-size: 2em;
+    }
+    
+    .hero-section p {
+        font-size: 1em;
+    }
+    
+    .app-item {
+        margin: 20px 0;
+        padding: 15px 0;
+    }
+}
+
+/* Remove excessive spacing */
+br + br + br {
+    display: none;
+}
+
+/* Improve link styling */
+.app-item a {
+    font-weight: bold;
+    transition: color 0.3s ease;
+}
+
+.app-item a:hover {
+    text-decoration: underline;
 }

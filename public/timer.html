@@ -141,7 +141,7 @@
         const counterEl = document.getElementById('counter');
         const audio = new Audio('/tone.mp3');
         // Request notification permissions on page load
-        if (Notification.permission !== "granted" && Notification.permission !== "denied") {
+        if (Notification.permission !== "granted" && Notification.permission !== "denied" && localStorage.getItem('timerNoNotification') !== 'ye') {
             Notification.requestPermission().then(permission => {
                 if (permission === "granted") {
                     console.log("Notification permission granted.");
@@ -165,13 +165,15 @@
 
             const focusMinutes = parseInt(document.getElementById('minutes').value, 10);
             const breakMinutes = parseInt(document.getElementById('break-minutes').value, 10);
-
-            if (isNaN(focusMinutes) || focusMinutes <= 0) {
+            if (localStorage.getItem('timerDevtools') === 'ye') {
+                //
+            } else if (isNaN(focusMinutes) || focusMinutes <= 0) {
                 alert('Please enter a valid number of Focus minutes.');
                 return;
             }
-
-            if (isNaN(breakMinutes) || breakMinutes <= 0) {
+            if (localStorage.getItem('timerDevtools') === 'ye') {
+                //
+            } else if (isNaN(breakMinutes) || breakMinutes <= 0) {
                 alert('Please enter a valid number of Break minutes.');
                 return;
             }
@@ -205,19 +207,27 @@
                 clearInterval(interval);
 
                 if (discripter.innerHTML === 'Currently on Focus Time') {
-                    audio.play();
+                    if (localStorage.getItem('timerNoSound') !== 'ye') {
+                        audio.play();
+                    } else {
+// nosound
+                    }
                     countdownEl.innerHTML = 'Loading...';
                     discripter.innerHTML = 'Currently on Break Time';
-                    if (Notification.permission === "granted") {
+                    if (Notification.permission === "granted" && localStorage.getItem('timerNoNotification') !== 'ye') {
                         new Notification("Focus time is over! Starting break time.");
                     }
                     time = breakMinutes * 60;
                     interval = setInterval(() => updateCountdown(focusMinutes, breakMinutes), 1000);
                 } else {
                     countdownEl.innerHTML = 'Loading...';
-                    audio.play();
+                    if (localStorage.getItem('timerNoSound') !== 'ye') {
+                        audio.play();
+                    } else {
+// nosound
+                    }
                     discripter.innerHTML = 'Currently on Focus Time';
-                    if (Notification.permission === "granted") {
+                    if (Notification.permission === "granted" && localStorage.getItem('timerNoNotification') !== 'ye') {
                         new Notification("Break time is over! Starting focus time.");
                     }
                     time = focusMinutes * 60;
@@ -237,6 +247,11 @@
                 counterEl.innerHTML = "●ㅤㅤㅤ●ㅤㅤㅤ●ㅤㅤㅤ-";
             } else if (cycleCount === 4) {
                 counterEl.innerHTML = "●ㅤㅤㅤ●ㅤㅤㅤ●ㅤㅤㅤ●";
+                if (localStorage.getItem('timerLongBreak') === 'ye') {
+                    LongBreak();
+                } else {
+                    
+                }
             } else if (cycleCount > 4) {
                 counterEl.innerHTML = "-ㅤㅤㅤ-ㅤㅤㅤ-ㅤㅤㅤ-";
                 cycleCount = 0;
@@ -258,6 +273,19 @@
                 document.getElementById('break-minutes').value = savedBreakMinutes;
             }
         });
+
+        function LongBreak() {
+            LongBreak = breakMinutes * 60;
+            LongBreak = LongBreak * 2;
+            if (localStorage.getItem('timerLongBreak') === 'ye') {
+                // Long break
+                time = LongBreak * 60;
+                countdownEl.innerHTML = `${LongBreak}:00`;
+                discripter.innerHTML = 'Currently on Long Break Time';
+            } else {
+                console.warn('this shouldn\'t happen');
+            }
+        }
     </script>
     <script>
         // Get modal elements

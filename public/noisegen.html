@@ -158,11 +158,17 @@
       // Change background and play new sound
       background.style.transition = 'opacity 1s ease-in-out';
       background.style.opacity = 0;
-
-      setTimeout(() => {
+      if (localStorage.getItem('noiseNoback') !== 'ye') {
+        background.style.backgroundImage = `url(${sounds[type].gif})`;
+        setTimeout(() => {
         background.style.backgroundImage = `url(${sounds[type].gif})`;
         background.style.opacity = 1;
       }, 1000);
+      } else {
+        background.style.backgroundImage = '';
+        background.style.opacity = 0;
+      }
+      
 
       setTimeout(() => {
         audio.src = sounds[type].audio;

@@ -2,7 +2,6 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-     
      <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title id="title-head">Beats v1.5</title>
     <link rel="stylesheet" type="text/css" href="style.css">
@@ -30,6 +29,8 @@
         <noscript><h2><b><div id="red-text"></div>Warning: You need javascript enabled to enjoy this site.</b></h2></div></noscript>
         
         <audio id="audioPlayer" style="display:none;" autoplay></audio>
+        <textarea id="customplaylist" placeholder="paste playlist URL here"></textarea>
+        <button id="loadCustomPlaylist" onclick="loadcustommusic()">Load Custom Playlist</button>
         <div id="metadata">
             <p id="title"></p>
             <p id="artist"></p>
@@ -59,6 +60,35 @@
             const currentTimeElement = document.getElementById('currentTime');
             const durationElement = document.getElementById('duration');
             const volumeElement = document.getElementById('volume');
+            const customplaylist = document.getElementById('customplaylist');
+            const loadCustomPlaylistButton = document.getElementById('loadCustomPlaylist');
+
+            
+
+            if (localStorage.getItem('beatsCustomMusic') === 'ye') {
+                customplaylist.style.display = 'block';
+                loadCustomPlaylistButton.style.display = 'block';
+            } else {
+                customplaylist.style.display = 'none';
+                loadCustomPlaylistButton.style.display = 'none';
+            }
+
+            function loadcustommusic() {
+                fetch(customplaylist.value)
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Failed to fetch music files from the provided URL.');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        
+                        musicFiles = data;
+                        shuffleAndPlay();
+                    })
+                    .catch(error => console.error('Error fetching custom playlist:', error));
+                playMusic(customplaylist.value);
+            }
 
             audioPlayer.addEventListener('timeupdate', () => {
                 const currentMinutes = Math.floor(audioPlayer.currentTime / 60);
@@ -284,12 +314,32 @@
                     }
     
                 </style>
+                <style>
+                    html, body {
+                        height: 100%;
+                        margin: 0;
+                        padding: 0;
+                    }
+                    body {
+                        min-height: 100vh;
+                        display: flex;
+                        flex-direction: column;
+                    }
+                    .container {
+                        flex: 1 0 auto;
+                    }
+                    .footer {
+                        flex-shrink: 0;
+                        width: 100%;
+                        box-sizing: border-box;
+                    }
+                </style>
                 <script>
                     // Check if dark mode was enabled last time
                     if (localStorage.getItem('darkMode') === 'enabled') {
                         document.body.classList.add('dark-mode');
                     }
-    
+                
                     // Toggle dark mode and save preference
                     darkModeToggle.addEventListener('click', () => {
                         document.body.classList.toggle('dark-mode');

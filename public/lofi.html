@@ -5,113 +5,68 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lofi Beta-v1.5</title>
     <link rel="stylesheet" type="text/css" href="lofistyle.css">
+    <style>
+        .footer {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background-color: #f8f9fa;
+            padding: 10px;
+            box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+        }
+        .footer .centered {
+            text-align: center;
+        }
+    </style>
 </head>
 <body>
     <div class="thick-blue-bar"></div>
     <div class="container">
         <div class="centered">
-        <h1>Lofi Beats</h1>
+            <h1>Lofi Beats</h1>
         </div>
         <div class="thin-blue-bar"></div>
-        <div class="footer">
+    </div>
+    <div class="footer">
         <div class="mooter">
             <p>Current Time: <span id="currentTime">0:00</span></p>
             <p>Duration: <span id="duration">0:00</span></p>
             <p>Volume: <span id="volume">100</span>%</p>
             <input id="timeBar" type="range" min="0" max="100" value="0" onchange="seekAudio()">
-            <audio id="audioPlayer" controls style="display:none;"></audio>
-        
-        <script>
-            const currentTimeElement = document.getElementById('currentTime');
-            const durationElement = document.getElementById('duration');
-            const volumeElement = document.getElementById('volume');
-
-            audioPlayer.addEventListener('timeupdate', () => {
-                const currentMinutes = Math.floor(audioPlayer.currentTime / 60);
-                const currentSeconds = Math.floor(audioPlayer.currentTime % 60);
-                const durationMinutes = Math.floor(audioPlayer.duration / 60);
-                const durationSeconds = Math.floor(audioPlayer.duration % 60);
-
-                currentTimeElement.textContent = `${currentMinutes}:${currentSeconds.toString().padStart(2, '0')}`;
-                durationElement.textContent = `${durationMinutes}:${durationSeconds.toString().padStart(2, '0')}`;
-                timeBar.value = (audioPlayer.currentTime / audioPlayer.duration) * 100;
-            });
-
-            audioPlayer.addEventListener('volumechange', () => {
-                volumeElement.textContent = Math.round(audioPlayer.volume * 100);
-            });
-            audioPlayer.addEventListener('ended', () => {
-                shuffleAndPlay();
-            });
-        </script>
-        <div class ="centered">
-        <button onclick="shuffleAndPlay()">››</button>
-        <button id="playPauseButton" onclick="togglePlayPause()">▶</button>
-        <button onclick="document.getElementById('audioPlayer').muted = !document.getElementById('audioPlayer').muted" disabled="true" >🔇</button>
+            <audio id="audioPlayer" controls>
+                <source src="flames.webm" type="video/webm">
+                Your browser does not support the audio element.
+            </audio>
+        </div>
+        <div class="centered">
+            <button onclick="shuffleAndPlay()">››</button>
+            <button id="playPauseButton" onclick="togglePlayPause()">▶</button>
+            <button onclick="document.getElementById('audioPlayer').muted = !document.getElementById('audioPlayer').muted">🔇</button>
         </div>
     </div>
-        <!-- <div class="short-blue-bar"></div><p>Volume: <span id="volume">100</span>%</p>
-         <p><span id="d"></span></p>
-        
-            <button onclick="document.getElementById('audioPlayer').volume -= 0.1"><b>Volume Down</b></button>
-            <button onclick="document.getElementById('audioPlayer').volume += 0.1"><b>Volume Up</b></button>
-        
-    </div> -->
     <script>
-        let musicFiles = [];
-
-        fetch('lofi.json')
-            .then(response => { 
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return response.json();
-            })
-            .then(data => {
-                musicFiles = data;
-                shuffleAndPlay(); // Auto-play when the page loads
-            })
-            .catch(error => console.error('Error loading music.json:', error));
-
-        function shuffleArray(array) {
-            for (let i = array.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [array[i], array[j]] = [array[j], array[i]];
-            }
-        }
-
-        function shuffleAndPlay() {
-            if (musicFiles.length === 0) {
-                console.error('No music files available to play.');
-                return;
-            }
-            shuffleArray(musicFiles);
-            playMusic(musicFiles[0]);
-        }
-
-        function playMusic(track) {
-            if (!track) {
-                console.error('No track provided to play.');
-                return;
-            }
-            const audioPlayer = document.getElementById('audioPlayer');
-            audioPlayer.src = track.src;
-            audioPlayer.play();
-
-            document.getElementById('title').innerText = `${track.title}`;
-            document.getElementById('artist').innerText = `By: ${track.artist}`;
-            document.getElementById('album').innerText = `Album: ${track.album}`;
-        }
-
         const audioPlayer = document.getElementById('audioPlayer');
+        const currentTimeElement = document.getElementById('currentTime');
+        const durationElement = document.getElementById('duration');
+        const volumeElement = document.getElementById('volume');
         const timeBar = document.getElementById('timeBar');
 
         audioPlayer.addEventListener('timeupdate', () => {
+            const currentMinutes = Math.floor(audioPlayer.currentTime / 60);
+            const currentSeconds = Math.floor(audioPlayer.currentTime % 60);
+            const durationMinutes = Math.floor(audioPlayer.duration / 60);
+            const durationSeconds = Math.floor(audioPlayer.duration % 60);
+
+            currentTimeElement.textContent = `${currentMinutes}:${currentSeconds.toString().padStart(2, '0')}`;
+            durationElement.textContent = `${durationMinutes}:${durationSeconds.toString().padStart(2, '0')}`;
             timeBar.value = (audioPlayer.currentTime / audioPlayer.duration) * 100;
         });
 
+        audioPlayer.addEventListener('volumechange', () => {
+            volumeElement.textContent = Math.round(audioPlayer.volume * 100);
+        });
+
         function togglePlayPause() {
-            const audioPlayer = document.getElementById('audioPlayer');
             const playPauseButton = document.getElementById('playPauseButton');
             if (audioPlayer.paused) {
                 audioPlayer.play();
@@ -127,28 +82,5 @@
             audioPlayer.currentTime = seekTime;
         }
     </script>
-    </div>
-    <div class="thin-blue-bar"></div>
-<div class="center">
-        <!--<p><a href="/lofilogs">Logs and Current Problems</a></p>
-        <p><a href="/">            Go back</a></p>
-        <p><sub>Debug info: beta-v1.5 (based on beats v1.3) PB:37sh3u:<span id="debugWaiting"></span>:<span id="rangeValue"></span></sub></p>
-        <script>
-            const rangeValueElement = document.getElementById('rangeValue');
-            timeBar.addEventListener('input', () => {
-            rangeValueElement.textContent = timeBar.value;
-            });
-        </script>
-        <script>
-            const debugWaitingElement = document.getElementById('debugWaiting');
-            audioPlayer.addEventListener('waiting', () => {
-            debugWaitingElement.textContent = 'true';
-            });
-            audioPlayer.addEventListener('playing', () => {
-            debugWaitingElement.textContent = 'false';
-            });
-        </script>
-    -->
-</div>
 </body>
 </html>

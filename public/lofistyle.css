@@ -1,7 +1,3 @@
-/* i know that is is stupid but im not a css expert */
-/* so, beware of the stupidity */
-
-
 /* Reset some default browser styles */
 * {
     margin: 0;
@@ -71,15 +67,6 @@ button {
     cursor: pointer;
 }
 
-button:disabled {
-    background-color: #888888; /* Gray color */
-    cursor: not-allowed;
-}
-
-button:disabled:hover {
-    background-color: #888888; /* Gray color */
-}
-
 .thin-button {
     background-color: #293d60; /* Blue color */
     color: #fff;
@@ -123,11 +110,6 @@ button:hover {
     width: 80%;
     margin: auto;
     align-items: center;
-}
-
-.centered {
-    text-align: center;
-    margin: 20px 0;
 }
 /* Header */
 header {
@@ -194,24 +176,12 @@ main {
 }
 
 /* Footer */
-.footer {
-    background: rgb(65, 65, 65);
+footer {
+    background: #333;
     color: #ffffff;
     text-align: center;
     padding: 10px;
     margin-top: 20px;
-    padding-top: 400px;
-    
-}
-
-.mooter {
-    background: rgb(36, 36, 36);
-    color: #ffffff;
-    text-align: center;
-    padding: 10px;
-    margin-top: 20px;
-    padding-top: 50px;
-    border-radius: 20px;
 }
 
 .thick-blue-bar {

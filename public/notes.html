@@ -35,7 +35,7 @@
 <body>
     <h1>Notes App</h1>
     <p id="saved">-</p>
-    <p><i>The download as PDF may not work as intended.</i></p>
+    <p id="pdftext"><i>The download as PDF may not work as intended.</i></p>
     <p>Note: Clearing your browser history may result in the loss of your saved notes.</p>
     <div id="toolbar"></div>
     <button onclick="formatText('bold')">
@@ -53,7 +53,7 @@
     <button onclick="saveNotes()">
         <img src="icons/Save-256.png" alt="Save" style="width: 10px; height: 10px;">
     </button>
-    <button onclick="downloadPdf()">
+    <button id="pdfbutton" onclick="downloadPdf()">
         <img src="icons/Download-256.png" alt="Download as PDF" style="width: 10px; height: 10px;">
     </button>
     </div>
@@ -124,6 +124,14 @@
         }
 
         // Download notes as a PDF file
+
+        if (localStorage.getItem('notesDownloadPdf') === 'ye') {
+            document.getElementById('pdfbutton').style.display = 'block';
+            document.getElementById('pdftext').style.display = 'block';
+        } else {
+            document.getElementById('pdfbutton').style.display = 'none';
+            document.getElementById('pdftext').style.display = 'none';
+        }
         
         function downloadPdf() {
             const editorContent = document.getElementById('editor').innerHTML;

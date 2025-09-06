@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced Settings</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="thick-blue-bar"></div>
+    <div class="container">
+    <h1>Advanced Settings</h1>
+    <br>
+    <p>Settings that you might find useful.</p>
+    <br>
+    
+            <h2>Notes Settings</h2>
+            <br>
+            <input type="checkbox" id="notes-download-pdf" class="checkbox">
+                <label for="notes-download-pdf">Download notes as PDF button</label>
+            </input>
+            <h2>Beats settings</h2>
+            <br>
+            <input type="checkbox" id="beats-custom-music" class="checkbox">
+                <label for="beats-custom-music">Have an option to play your own playlists. (Beta, there is NO guarantee it will work.)</label>
+            </input>
+            <br>
+            <h2>Noise Generator Settings</h2>
+            <br>
+            <input type="checkbox" id="noise-noback" class="checkbox">
+                <label for="noise-noback">Remove the moving background.</label>
+            </input>
+            <br>
+            <h2>Timer Settings</h2>
+            <br>
+            <input type="checkbox" id="timer-no-sound" class="checkbox">
+                <label for="timer-no-sound">Disable sound when timer ends.</label>
+            </input>
+            <br>
+            <input type="checkbox" id="timer-no-notification" class="checkbox">
+                <label for="timer-no-notification">Disable notification when timer ends.</label>
+            </input>
+            <br>
+            <input type="checkbox" id="timer-long-break" class="checkbox">
+                <label for="timer-long-break">Enable long break.</label>
+            </input>
+            <br>
+            <input type="checkbox" id="timer-devtools" class="checkbox">
+                <label for="timer-devtools">Enable devtools.</label>
+            </input>
+            <br>
+            
+            <button id="timer-askfornotification">Ask for notification permissions</button>
+            </div>
+
+        
+            </div>
+
+            <script>
+                loadSettings();
+                const notesDownloadPdf = document.getElementById('notes-download-pdf');
+                notesDownloadPdf.addEventListener('change', function() {
+                    if (this.checked) {
+                        localStorage.setItem('notesDownloadPdf', 'ye');
+                    } else {
+                        localStorage.setItem('notesDownloadPdf', 'nah');
+                    }
+    
+                    // Call the loadSettings function to initialize settings
+                    loadSettings();
+                });
+                const notificationPermission = document.getElementById('timer-askfornotification');
+                notificationPermission.addEventListener('click', function() {
+                    Notification.requestPermission().then(function(permission) {
+                        if (permission === 'granted') {
+                            alert('Notification permission granted.');
+                        } else if (permission === 'denied') {
+                            alert('Notification permission denied.');
+                        } else {
+                            alert('Notification permission dismissed.');
+                        }
+                    });
+                });
+                const beatsCustomMusic = document.getElementById('beats-custom-music');
+                beatsCustomMusic.addEventListener('change', function() {
+                    if (this.checked) {
+                        localStorage.setItem('beatsCustomMusic', 'ye');
+                    } else {
+                        localStorage.setItem('beatsCustomMusic', 'nah');
+                    }
+                });
+                const noiseNoback = document.getElementById('noise-noback');
+                noiseNoback.addEventListener('change', function() {
+                    if (this.checked) {
+                        localStorage.setItem('noiseNoback', 'ye');
+                    } else {
+                        localStorage.setItem('noiseNoback', 'nah');
+                    }
+                });
+                const timerNoSound = document.getElementById('timer-no-sound');
+                timerNoSound.addEventListener('change', function() {
+                    if (this.checked) {
+                        localStorage.setItem('timerNoSound', 'ye');
+                    } else {
+                        localStorage.setItem('timerNoSound', 'nah');
+                    }
+                });
+                const timerNoNotification = document.getElementById('timer-no-notification');
+                timerNoNotification.addEventListener('change', function() {
+                    if (this.checked) {
+                        localStorage.setItem('timerNoNotification', 'ye');
+                    } else {
+                        localStorage.setItem('timerNoNotification', 'nah');
+                    }
+                });
+                const timerLongBreak = document.getElementById('timer-long-break');
+                timerLongBreak.addEventListener('change', function() {
+                    if (this.checked) {
+                        localStorage.setItem('timerLongBreak', 'ye');
+                    } else {
+                        localStorage.setItem('timerLongBreak', 'nah');
+                    }
+                });
+                const timerDevtools = document.getElementById('timer-devtools');
+                timerDevtools.addEventListener('change', function() {
+                    if (this.checked) {
+                        localStorage.setItem('timerDevtools', 'ye');
+                    } else {
+                        localStorage.setItem('timerDevtools', 'nah');
+                    }
+                });
+                // Load settings from localStorage
+                function loadSettings() {
+                    const notesDownloadPdf = localStorage.getItem('notesDownloadPdf') === 'ye';
+                    const beatsCustomMusic = localStorage.getItem('beatsCustomMusic') === 'ye';
+                    const noiseNoback = localStorage.getItem('noiseNoback') === 'ye';
+                    const timerNoSound = localStorage.getItem('timerNoSound') === 'ye';
+                    const timerNoNotification = localStorage.getItem('timerNoNotification') === 'ye';
+                    const timerLongBreak = localStorage.getItem('timerLongBreak') === 'ye';
+
+                    document.getElementById('notes-download-pdf').checked = notesDownloadPdf;
+                    document.getElementById('beats-custom-music').checked = beatsCustomMusic;
+                    document.getElementById('noise-noback').checked = noiseNoback;
+                    document.getElementById('timer-no-sound').checked = timerNoSound;
+                    document.getElementById('timer-no-notification').checked = timerNoNotification;
+                    document.getElementById('timer-long-break').checked = timerLongBreak;
+                }
+            </script>
+</body>
