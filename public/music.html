@@ -3,29 +3,67 @@
 <head>
     <meta charset="UTF-8">
      <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title id="title-head">Beats v1.5</title>
+    <title id="title-head">Beats v2.2</title>
     <link rel="stylesheet" type="text/css" href="style.css">
 </head>
 <body>
-    <div id="loadingScreen" style="position: fixed; width: 100%; height: 100%; background: rgb(53, 53, 53); display: flex; justify-content: center; align-items: center; z-index: 1000;">
+    <style>
+        html, body {
+            overflow: hidden;
+            height: 100%;
+        }
+    </style>
+    <div class="corner-button">
+        <button class="circlebutton" onclick="window.location.href='/'" title="Go back home"><img src="icons/corner-up-left-white.png" alt="Home"></button>
+    </div>
+    <div class="settings-button">
+    <input type="checkbox" id="settingsToggle" style="user-select: none;" class="settings-checkbox" hidden>
+    <label for="settingsToggle" class="circlebutton" title="Toggle settings">
+        <img src="icons/settings-white.png" alt="Settings">
+    </label>
+</div>
+<div class="darkmode-popout" >
+    <button class="circlebutton" title="Toggle dark mode" id="darkModeToggle"><img src="icons/moon-white.png" alt="Dark Mode"></button>
+</div>
+<script>
+    // Show or hide settings based on checkbox state
+    const settingsToggle = document.getElementById('settingsToggle');
+    const darkModeToggle = document.getElementById('darkModeToggle');
+
+    // Add transition for smooth movement
+    darkModeToggle.style.transition = 'transform 0.5s ease';
+
+    settingsToggle.addEventListener('change', () => {
+        if (settingsToggle.checked) {
+            darkModeToggle.style.transform = 'translateY(60px)';
+        } else {
+            darkModeToggle.style.transform = 'translateY(0)';
+        }
+    });
+    
+    
+</script>
+    <div id="loadingScreen" style="position: fixed; width: 100%; height: 100%; background: rgb(53, 53, 53); display: flex; justify-content: center; align-items: center; z-index: 9999;">
             <img src="loading.gif" alt="Loading...">
         </div>
         <script>
             window.addEventListener('load', () => {
                 setTimeout(() => {
                     document.getElementById('loadingScreen').style.display = 'none';
-                }, 500); 
+                }, 1000); 
             });
         </script>
-    <div class="thick-blue-bar"></div>
+    
     <div class="container">
-        
+        <o>o</o>
+        <br>
+        <o>o</o>
         <h1>Beats</h1>
         <p>Beats is an ad-free app that plays music that is more focused on more relaxing genres, so you can focus more. </p>
         <p><i>Disclaimer: This does not include lofi, as we are making a dedicated lofi app.</i></p>
-        <o>spacer</o>
+        <o>o</o>
         <p><i>Currently Playing:</i></p>
-        <o>spacer</o>
+        <o>o</o>
         <noscript><h2><b><div id="red-text"></div>Warning: You need javascript enabled to enjoy this site.</b></h2></div></noscript>
         
         <audio id="audioPlayer" style="display:none;" autoplay></audio>
@@ -36,7 +74,7 @@
             <p id="artist"></p>
             <p id="album"></p>
         </div>
-        <o>spacer</o>
+        <o>o</o>
         <div class="short-blue-bar"></div>
         <p id="timed1"><a href="/screensaver.html" target="_blank"><b>Open the screensaver here!</b></a> (This will open in a new tab).</p>
         <p id="timed2"><a href="/focus.html" target="_blank"><b>Open Focus mode here.</b></a> (Click to fullscreen in tab, press ESC to exit.)</p>
@@ -82,7 +120,9 @@
                         return response.json();
                     })
                     .then(data => {
-                        
+                        lastPlayedList = [];
+                        numberOfTracks = data.length / 1.5;
+                        console.log(numberOfTracks);
                         musicFiles = data;
                         shuffleAndPlay();
                     })
@@ -114,17 +154,25 @@
             });
         </script>
         <div class="centered">
-        <button onclick="shuffleAndPlay()">››</button>
-        <button id="playPauseButton" onclick="togglePlayPause()">▶</button>
-        <button onclick="document.getElementById('audioPlayer').muted = !document.getElementById('audioPlayer').muted">🔇</button>
+        <button class="circlebutton" onclick="shuffleAndPlay()" ><img src="icons/skip-forward-white.png" alt="Skip Forward"></button>
+        <button id="playPauseButton" class="circlebutton" onclick="togglePlayPause()"><img src="icons/pause-white.png" alt="Play/Pause"></button>
+        <button class="circlebutton" onclick="document.getElementById('audioPlayer').muted = !document.getElementById('audioPlayer').muted"><img src="icons/volume-x-white.png" alt="Mute/Unmute"></button>
         </div> 
-        <o>spacer</o>
-        <o>spacer</o>
-        <o>spacer</o>
-        <o>spacer</o>
-        <o>spacer</o>
-        <o>spacer</o>
-        <o>spacer</o>
+        <o>o</o>
+        <br>
+        <o>o</o>
+        <br>
+        <o>o</o>
+        <br>
+        <o>o</o>
+        <br>
+        <o>o</o>
+        <br>
+        <o>o</o>
+        <br>
+        <o>o</o>
+        <br>
+        <o>o</o>
     <!-- the <o> tags are defined in the css (and also the <w> tags)-->
         <script>
             const timed1 = document.getElementById('timed1');
@@ -152,6 +200,8 @@
         </script>
         <script>
             let musicFiles = [];
+            let numberOfTracks = 20;
+            let lastPlayedList = [];
 
             fetch('music.json')
                 .then(response => { 
@@ -188,13 +238,35 @@
                     return;
                 }
                 const audioPlayer = document.getElementById('audioPlayer');
+                console.log(lastPlayedList)
+
+                if (!lastPlayedList.find(t => t.src === track.src)) {
                 audioPlayer.src = track.src;
                 audioPlayer.play();
+                } else {
+                    shuffleAndPlay();
+                    console.log("attempted to play" + track.src);
+                    return;
+                }
 
                 document.getElementById('title').innerText = `${track.title}`;
                 document.getElementById('artist').innerText = `By: ${track.artist}`;
+                if (track.album === "(Not in the system yet...)") {
+                    document.getElementById('album').style = `opacity: 0;`;
+                } else {
+                    document.getElementById('album').style = `opacity: 100;`;
+                }
                 document.getElementById('album').innerText = `Album: ${track.album}`;
-                document.getElementById('title-head').innerText = `${track.title}` + ` - Beats 1.5`;
+                document.getElementById('title-head').innerText = `${track.title}` + ` - Beats v2.2`;
+
+
+
+                
+                lastPlayedList.unshift(track);
+                if (lastPlayedList.length > numberOfTracks) {
+                    lastPlayedList.pop();
+                }
+            
 
                 // Update the current track information on the server
                 fetch('/current-track', {
@@ -211,10 +283,10 @@
                 const playPauseButton = document.getElementById('playPauseButton');
                 if (audioPlayer.paused) {
                     audioPlayer.play();
-                    playPauseButton.textContent = '⏸';
+                    playPauseButton.innerHTML = '<img src="icons/pause-white.png" alt="Play/Pause">';
                 } else {
                     audioPlayer.pause();
-                    playPauseButton.textContent = '▶';
+                    playPauseButton.innerHTML = '<img src="icons/play-white.png" alt="Play/Pause">';
                 }
             }
 
@@ -265,9 +337,9 @@
         
         
     </div>
-    <div class="footer">
+    <!-- <div class="footer">
             <div class="thick-blue-bar"></div>
-            
+
             <div class="center"><button id="darkModeToggle">Dark/Light mode (Beta)</button></div>
             <div class="center">
                 <w>w</w>
@@ -333,7 +405,7 @@
                         width: 100%;
                         box-sizing: border-box;
                     }
-                </style>
+                </style> -->
                 <script>
                     // Check if dark mode was enabled last time
                     if (localStorage.getItem('darkMode') === 'enabled') {
@@ -350,8 +422,8 @@
                         }
                     });
                 </script>
-                <w>w</w>
-                <p><sub>Debug info: v1.5 PB:37sh3u:<span id="debugWaiting"></span>:<span id="rangeValue"></span>:<noscript>NS</noscript></sub></p>
+                <!-- <w>w</w>
+                <p><sub>Debug info: v2.2 PB:37sh3u:<span id="debugWaiting"></span>:<span id="rangeValue"></span>:<noscript>NS</noscript></sub></p>
                 <w>w</w>
                 <script>
                     const rangeValueElement = document.getElementById('rangeValue');
@@ -368,7 +440,7 @@
                         debugWaitingElement.textContent = 'false';
                     });
                 </script>
-            </div>
+            </div> -->
             
             </div>
 

@@ -6,7 +6,7 @@
 }
 
 .warning-banner {
-    background-color: #ffcc00; /* Yellow background */
+    background-color: #e88019; /* Yellow background */
     color: #000; /* Black text */
     padding: 10px;
     text-align: center;
@@ -25,6 +25,7 @@ body {
     color: #333;
     line-height: 1.6;
 }
+
 
 /* Global link styling */
 a {
@@ -57,6 +58,11 @@ button {
 
 button:hover {
     background-color: #3a3b76; /* Dark blue color */
+    transform: scale(1.05);
+}
+
+button:active {
+    transform: scale(0.99);
 }
 
 /*music player styling*/
@@ -156,16 +162,18 @@ input[type="number"] {
     box-sizing: border-box;
 }
 
-/* Spacer: Type any text using the <o></o> tag */
+/*These are spacers but i cant remove the spacers bc beats relies on them*/
 o {
     margin-top: 20px;
     color: #00000000; 
+    user-select: none;
 }
 
 w {
     margin-top: 10px;
     color: #00000000; 
     font-size: 10px;
+    user-select: none;
 }
 
 /* Showcase */
@@ -191,6 +199,11 @@ main {
     padding: 20px;
     background: #fff;
     margin-top: 20px;
+}
+
+.dark-mode main {
+    background: #1c1c1c;
+    
 }
 
 /* Footer */
@@ -377,10 +390,11 @@ dialog button:hover {
 
 body {
     transition: background-color 1s, color 1s;
+    transition: all 0.5s ease;
 }
 .dark-mode {
-    background-color: #121212;
-    color: #000000;
+    background-color: rgb(28, 28, 28);
+    color: #ffffff;
 }
 .dark-mode .thick-blue-bar,
 .dark-mode .short-blue-bar,
@@ -536,10 +550,16 @@ checkbox input[type="checkbox"] {
 /* Footer Improvements */
 .footer {
     flex-shrink: 0;
-    background: #333;
-    color: #ffffff;
+    background: #ffffff;
+    color: #000000;
     padding: 20px 0;
     margin-top: auto;
+    transition: background-color 1s, color 1s;
+    transition: all 0.5s ease;
+}
+
+.dark-mode .footer {
+    background: rgb(26, 26, 26);
 }
 
 .footer-content {
@@ -572,10 +592,12 @@ checkbox input[type="checkbox"] {
 
 .dark-mode .footer {
     background: #1a1a1a;
+    transition: background-color 1s, color 1s;
+    transition: all 0.5s ease;
 }
 
 .dark-mode .warning-banner {
-    background-color: #444400;
+    background-color: #c97207;
     color: #ffffff;
 }
 
@@ -613,4 +635,70 @@ br + br + br {
 
 .app-item a:hover {
     text-decoration: underline;
+}
+
+/* new buttons yippie */
+.circlebutton {
+    background-color: #5b7fbf;
+    color: #fff;
+    padding: 20px;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    width: 50px;
+    height: 50px;
+    align-items: center;
+    justify-content: center;
+    display: inline-flex;
+
+}
+
+.corner-button {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    z-index: 1001; /* Ensure it stays on top */
+}
+
+.settings-button {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1001; /* Ensure it stays on top */
+}
+
+.settings-checkbox {
+    display: none;
+    user-select: none;
+}
+
+
+/* Optional: style when checked */
+.settings-checkbox:checked + label {
+    transition: transform .5s;
+    transform: rotate(180deg);
+}
+
+.settings-checkbox:not(:checked) + label {
+    transition: transform .5s;
+    transform: rotate(0deg);
+}
+
+.darkmode-popout {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 998; /* Ensure it stays on top */
+    transition: translate 0.5s ease;
+}
+
+.dark-mode .circlebutton {
+    background-color: #633171;
+    color: #fff;
+}
+
+.dark-mode .settings-button {
+    background-color: #633171;
+    color: #fff;
+    border-radius: 50%;
 }

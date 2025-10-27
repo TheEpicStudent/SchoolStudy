@@ -117,6 +117,18 @@ const server = http.createServer((req, res) => {
                 </div>
                 </body>
             </html>`);
+
+        } else if (pathname === '/focus' && req.method === 'GET') {
+        const filePath = path.join(__dirname, 'public', 'focus.html');
+        fs.readFile(filePath, (err, data) => {
+            if (err) {
+                res.writeHead(500, { 'Content-Type': 'text/html' });
+                res.end('Server Error');
+            } else {
+                res.writeHead(200, { 'Content-Type': 'text/html' });
+                res.end(data, 'utf-8');
+            }
+        });
     } else {
         let filePath = path.join(__dirname, 'public', pathname === '/' ? 'index.html' : pathname);
         const extname = String(path.extname(filePath)).toLowerCase();
@@ -142,6 +154,7 @@ const server = http.createServer((req, res) => {
         });
     }
 });
+
 
 server.listen(port, () => {
     console.log(`Server is listening on port http://localhost:${port}`);
